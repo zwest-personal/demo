@@ -7,21 +7,16 @@ import (
 
 var Svc *common.Service
 
-// Init preps our HTTP REST routes using the Chi Go Mux
-func Init(s *common.Service) {
+// Initialize preps our HTTP REST routes using the Chi Go Mux
+func Initialize(s *common.Service) *chi.Mux {
 	Svc = s
-
 	router := chi.NewRouter()
-	if Svc.Cfg.APIPath != "" {
-		router.Route(Svc.Cfg.APIPath, func(rg chi.Router) {
-			// Helper route for debugging/getting Payment info for an Org
-			rg.Get("/connect", establishSocket)
-		})
-	} else {
-		// Handle error or fallback to a default API path
-		router.Route("/default", func(rg chi.Router) {
-			// Helper route for debugging/getting Payment info for an Org
-			rg.Get("/connect", establishSocket)
-		})
-	}
+	router.Route(Svc.Cfg.APIPath, func(rg chi.Router) {
+		// Helper route for debugging/getting Payment info for an Org
+		rg.Get("/connect", establishSocket)
+
+		// Dummy route to test React connectivity
+		rg.Get("/ping", getPingHandler)
+	})
+	return router
 }

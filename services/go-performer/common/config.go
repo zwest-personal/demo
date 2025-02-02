@@ -10,6 +10,9 @@ type Config struct {
 	ENV     string `envconfig:"ENV" required:"true"`
 	APIPath string `envconfig:"API_PATH" required:"true"`
 
+	// ServerAddr is our host:port for the service, host can be dropped if you're to listen in on any IP
+	ServerAddr string `envconfig:"SERVER_ADDR" required:"true"`
+
 	RedisCN string `envconfig:"REDIS_CN" required:"true"`
 	MongoCN string `envconfig:"MONGO_CN" required:"true"`
 }
