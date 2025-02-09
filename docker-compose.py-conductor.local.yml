@@ -1,0 +1,74 @@
+services:
+  nginx:
+    restart: always
+    build:
+      context: ./
+      dockerfile: dev/nginx/Dockerfile.local
+    links:
+      - py-conductor
+    volumes:
+      - ./sites/dothething/placeholder:/usr/share/nginx/html
+    depends_on:
+      py-conductor:
+        condition: service_started
+    ports:
+      - "8080:8080"
+      - "8083:443"
+      - "443:443"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  py-conductor:
+    build:
+      context: ./services/py-conductor
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./services/py-conductor:/app
+    links:
+      - redis
+      - nats
+      - mongodb
+    ports:
+      - "8080"
+    env_file:
+      - ./services/py-conductor/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  mongodb:
+    restart: always
+    image: mongo:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    environment:
+      # Since this is just local mongo w/in the Compose network, exposing creds like this is no biggie
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: "demosystem"
+  nats:
+    restart: always
+    image: nats:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+#volumes:
+#  py-conductor:

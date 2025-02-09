@@ -1,9 +1,10 @@
 # Socket establishment and communication route
 
 from fastapi import APIRouter, Response, status, WebSocket
+from ..config import Config
 
 router = APIRouter(
-    prefix="/ws",
+    prefix=Config().API_PATH + "/ws",
     tags=["websocket"],
 )
 
