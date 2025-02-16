@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Path, Request
 
-from .api import performers, socket, symphony
+from .api import performers, socket, symphony, debug
 from .config import Config
 
 app = FastAPI(title="DoTheThing Demo Conductor",
@@ -14,3 +14,4 @@ app = FastAPI(title="DoTheThing Demo Conductor",
 app.include_router(performers.router)
 app.include_router(socket.router)
 app.include_router(symphony.router)
+app.include_router(debug.router)
