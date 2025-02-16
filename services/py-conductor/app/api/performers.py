@@ -4,7 +4,7 @@ from fastapi import APIRouter, Response, status
 from ..config import Config
 
 router = APIRouter(
-    prefix= Config().API_PATH + "/performers",
+    prefix= "/performers",
     tags=["performers"],
 )
 

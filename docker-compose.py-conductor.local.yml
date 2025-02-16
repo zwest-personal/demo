@@ -40,6 +40,8 @@ services:
         max-size: "200k"
         max-file: "10"
   mongodb:
+    # MongoDB setup in this script will reset the data if restarted
+    # Volumes can be used to persist the data if we want
     restart: always
     image: mongo:latest
     logging:
@@ -49,8 +51,14 @@ services:
         max-file: "10"
     environment:
       # Since this is just local mongo w/in the Compose network, exposing creds like this is no biggie
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: "demosystem"
+      MONGO_INITDB_ROOT_USERNAME: demo
+      MONGO_INITDB_ROOT_PASSWORD: demo
+      MONGO_INITDB_DATABASE: demo
+    volumes:
+      - ./dev/migrations/mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      # If an error occurs when spinning up MongoDB, volume needs to be manually created with:
+      # docker volume create --name=demo_mongodata
+      - mongodb-data:/data/db
   nats:
     restart: always
     image: nats:latest
@@ -69,6 +77,9 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+
+volumes:
+  mongodb-data:
 
 #volumes:
 #  py-conductor:

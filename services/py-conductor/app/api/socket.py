@@ -4,7 +4,7 @@ from fastapi import APIRouter, Response, status, WebSocket
 from ..config import Config
 
 router = APIRouter(
-    prefix=Config().API_PATH + "/ws",
+    prefix="/ws",
     tags=["websocket"],
 )
 

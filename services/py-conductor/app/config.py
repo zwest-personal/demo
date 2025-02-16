@@ -18,4 +18,8 @@ class Config(object):
         # Connection strings - sensitive
         self.REDIS_CN = os.getenv('REDIS_CN')
         self.MONGO_CN = os.getenv('MONGO_CN')
+        self.MONGO_DB = os.getenv('MONGO_DB', "demo")
         self.NATS_CN = os.getenv('NATS_CN')
+
+        # DB Info
+        self.MONGO_COLLECTION_SYMPHONY = os.getenv("MONGO_COLLECTION_SYMPHONY", "symphony")
