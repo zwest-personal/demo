@@ -43,6 +43,10 @@ shenanigans I can cook up with it.
 
 ## Running
 
+NEVERMIND
+
+IGNORE ALL THIS UNTIL I CIRCLE BACK TO THE MAKE
+
 To run it all together, use:
 `make composition`
 Requires docker.  Will build and spin up all the components and then make everything available
