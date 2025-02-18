@@ -8,6 +8,8 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"github.com/zwest-personal/demo/services/go-performer/listeners"
 	"net/http"
 	"os"
 	"os/signal"
@@ -33,6 +35,10 @@ func init() {
 }
 
 func main() {
+	// This is purely to make it easier to see a restart in logging
+	// In a prod env, ditch it
+	fmt.Println("========== GO PERFORMER (RE)STARTING ==========")
+
 	// Process configuration file (.env), allow passing in a specific on for stuff like local development
 	envFile := os.Getenv("ENV_FILE")
 	if envFile != "" {
@@ -55,6 +61,8 @@ func main() {
 
 	// Spin things up
 	helpers.Initialize(&Svc)
+	listeners.Initialize(&Svc)
+
 	router := handlers.Initialize(&Svc)
 
 	defaultTimeout := 10 * time.Second
@@ -80,6 +88,7 @@ func main() {
 
 // catchPanic is just here to help us out if we did something dumb in runtime
 // Panics sent by third party components don't always provide good debugging info
+// Panic in Go is pretty much always a bad thing
 func catchPanic() {
 	if r := recover(); r != nil {
 		Svc.Log.Fatal().Msgf("Panic: %v", r)

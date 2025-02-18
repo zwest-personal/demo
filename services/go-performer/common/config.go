@@ -1,6 +1,7 @@
 package common
 
 import (
+	"github.com/nats-io/nats.go"
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
 )
@@ -15,6 +16,7 @@ type Config struct {
 
 	RedisCN string `envconfig:"REDIS_CN" required:"true"`
 	MongoCN string `envconfig:"MONGO_CN" required:"true"`
+	NatsCN  string `envconfig:"NATS_CN" required:"true"`
 }
 
 // Service defines our shared connections/clients
@@ -25,7 +27,7 @@ type Service struct {
 	RedisCli redis.UniversalClient
 
 	// NatsCli is our Nats (pub/sub) client
-	// NatsCli *nats.Client
+	NatsCli *nats.Conn
 
 	// MongoCli is our MongoDB (NoSQL) client
 	// MongoCli *mongo.Client

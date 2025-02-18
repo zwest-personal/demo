@@ -6,5 +6,5 @@ import "github.com/zwest-personal/demo/services/go-performer/common"
 var Svc *common.Service
 
 func Initialize(s *common.Service) {
-
+	initializeNats(s)
 }

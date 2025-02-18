@@ -1,0 +1,12 @@
+FROM golang:alpine
+
+RUN apk add coreutils entr
+RUN go install github.com/bokwoon95/wgo@latest
+
+VOLUME ["/go/src/app"]
+WORKDIR /go/src/app
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+
+CMD wgo run -poll 2000ms main.go
