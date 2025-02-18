@@ -1,0 +1,8 @@
+.project
+.env
+.idea
+npm-debug.log
+.push*
+docker-compose.yml
+.devcontainer
+.vscode
