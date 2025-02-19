@@ -1,0 +1,13 @@
+[package]
+name = "rust-performer"
+version = "0.0.1"
+authors = ["Zelda West <west@jhu.edu>"]
+
+[dependencies]
+iron = "0.6.0"
+router = "0.6.0"
+log = "0.4"
+fern = { version = "0.5", features = ["colored"] }
+chrono = "0.4"
+rustc_version = "0.2.3"
+

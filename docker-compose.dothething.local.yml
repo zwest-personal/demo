@@ -1,0 +1,146 @@
+services:
+  nginx:
+    restart: always
+    build:
+      context: ./
+      dockerfile: dev/nginx/Dockerfile.local
+    links:
+      - py-conductor
+      - go-performer
+      - rust-performer
+      - cs-performer
+      - node-performer
+    ports:
+      - "8080:8080"
+      - "8083:443"
+      - "443:443"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  py-conductor:
+    restart: always
+    build:
+      context: ./services/py-conductor
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./services/py-conductor:/app
+    links:
+      - redis
+      - nats
+    ports:
+      - "8080"
+    env_file:
+      - ./services/py-conductor/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  go-performer:
+    restart: always
+    build:
+      context: ./services/go-performer
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./services/go-performer:/app
+    links:
+      - redis
+      - nats
+    ports:
+      - "8080"
+    env_file:
+      - ./services/go-performer/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  rust-performer:
+    restart: always
+    build:
+      context: ./services/rust-performer
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./services/rust-performer:/app
+    links:
+      - redis
+      - nats
+    ports:
+      - "8080"
+    env_file:
+      - ./services/rust-performer/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  node-performer:
+    restart: always
+    build:
+      context: ./services/node-performer
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./services/node-performer:/app
+    links:
+      - redis
+      - nats
+    ports:
+      - "8080"
+    env_file:
+      - ./services/node-performer/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  cs-performer:
+    restart: always
+    build:
+      context: ./services/cs-performer
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./services/cs-performer:/app
+    links:
+      - redis
+      - nats
+    ports:
+      - "8080"
+    env_file:
+      - ./services/cs-performer/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  nats:
+    restart: always
+    image: nats:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+#  Will readd
+#  mongodb:
+#    restart: always
+#    image: mongodb:latest
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "200k"
+#        max-file: "10"
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  dothething:
