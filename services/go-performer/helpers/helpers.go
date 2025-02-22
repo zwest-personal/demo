@@ -7,4 +7,5 @@ var Svc *common.Service
 
 func Initialize(s *common.Service) {
 	initializeNats(s)
+	initializeTemporal(s)
 }

@@ -8,8 +8,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"github.com/zwest-personal/demo/services/go-performer/listeners"
 	"net/http"
 	"os"
 	"os/signal"
@@ -22,6 +20,9 @@ import (
 	"github.com/zwest-personal/demo/services/go-performer/common"
 	"github.com/zwest-personal/demo/services/go-performer/handlers"
 	"github.com/zwest-personal/demo/services/go-performer/helpers"
+	"github.com/zwest-personal/demo/services/go-performer/listeners"
+
+	chiWorkflow "github.com/zwest-personal/demo/services/go-performer/middleware/chi/temporal"
 )
 
 // Common vars, though in practice it's just the one that has everything else in it...
@@ -36,8 +37,7 @@ func init() {
 
 func main() {
 	// This is purely to make it easier to see a restart in logging
-	// In a prod env, ditch it
-	fmt.Println("========== GO PERFORMER (RE)STARTING ==========")
+	Svc.Log.Trace().Msg("========== GO PERFORMER (RE)STARTING ==========")
 
 	// Process configuration file (.env), allow passing in a specific on for stuff like local development
 	envFile := os.Getenv("ENV_FILE")
@@ -72,6 +72,9 @@ func main() {
 		ReadTimeout:  defaultTimeout,
 		WriteTimeout: defaultTimeout,
 	}
+
+	// Automatically add Temporal to all Chi routes
+	router.Use(chiWorkflow.AutoWorkflow)
 
 	// Start Server, watch for closure
 	go func() {

@@ -16,7 +16,8 @@ func Initialize(s *common.Service) *chi.Mux {
 		rg.Get("/connect", establishSocket)
 
 		// Dummy route to test React connectivity
-		rg.Get("/ping", getPingHandler)
+		helpers.
+			rg.Get("/ping", getPingHandler)
 	})
 	return router
 }
