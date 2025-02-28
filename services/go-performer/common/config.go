@@ -4,7 +4,6 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
-	temporal "go.temporal.io/sdk/client"
 )
 
 // Config holds all configuration data that is going to be pulled from the environment
@@ -36,8 +35,4 @@ type Service struct {
 
 	// Log is the shared zerolog logging system, which does some nice JSON logs useful for Kibana/Elastic searching
 	Log zerolog.Logger
-
-	// Workflow is the Temporal client that is used to establish and run workflows
-	// The Go performer doesn't really have much functionality that would need a Workflow at this time, this is for self training
-	Workflow *temporal.Client
 }

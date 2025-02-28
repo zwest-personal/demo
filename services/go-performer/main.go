@@ -21,8 +21,6 @@ import (
 	"github.com/zwest-personal/demo/services/go-performer/handlers"
 	"github.com/zwest-personal/demo/services/go-performer/helpers"
 	"github.com/zwest-personal/demo/services/go-performer/listeners"
-
-	chiWorkflow "github.com/zwest-personal/demo/services/go-performer/middleware/chi/temporal"
 )
 
 // Common vars, though in practice it's just the one that has everything else in it...
