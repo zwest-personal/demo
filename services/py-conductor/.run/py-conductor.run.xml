@@ -1,19 +1,24 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="py-conductor" type="PythonConfigurationType" factoryName="Python">
     <module name="demo" />
-    <option name="ENV_FILES" value="" />
+    <option name="ENV_FILES" value="$PROJECT_DIR$/services/py-conductor;$PROJECT_DIR$/services/py-conductor/wenv" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
-    <option name="SDK_NAME" value="Python 3.13 - Conductor" />
+    <option name="SDK_NAME" value="Python 3.13 (demo/win)" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/services/py-conductor" />
     <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    <EXTENSION ID="software.aws.toolkits.jetbrains.core.execution.PythonAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </EXTENSION>
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/services/py-conductor/app.py" />
     <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="false" />

@@ -22,6 +22,8 @@ type Config struct {
 
 // Service defines our shared connections/clients
 type Service struct {
+	Name string
+
 	Cfg *Config
 
 	// RedisCli is our redis (db) client
@@ -36,3 +38,16 @@ type Service struct {
 	// Log is the shared zerolog logging system, which does some nice JSON logs useful for Kibana/Elastic searching
 	Log zerolog.Logger
 }
+
+// Subject stores all our Nats listeners
+// In a microservice setup, you'd opt for some sort of discovery or shared configuration to make sure all services
+// know what subjects to watch/use
+
+//go:generate stringer -type Subject
+type Subject int
+
+const (
+	Broadcast Subject = iota
+	Ready
+	Action
+)

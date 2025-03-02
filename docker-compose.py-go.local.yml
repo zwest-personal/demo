@@ -32,7 +32,7 @@ services:
       - nats
       - mongodb
     ports:
-      - "8080"
+      - "8081:8080"
     env_file:
       - ./services/py-conductor/.env.local
     logging:
@@ -51,7 +51,7 @@ services:
       - nats
       - mongodb
     ports:
-      - "8080"
+      - "8082:8080"
     env_file:
       - ./services/go-performer/.env.local
     logging:
@@ -97,7 +97,6 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-
 volumes:
   mongodb-data:
 

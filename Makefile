@@ -36,6 +36,12 @@ py:
 	docker-compose -f docker-compose.py-conductor.local.yml up --build
 	@echo "Py Conductor checking out."
 
+.PHONY: pygo
+pygo:
+	@echo "Building and running the Py conductor with Go performer in Docker using local env file..."
+	docker-compose -f docker-compose.py-go.local.yml up --build
+	@echo "Py Conductor and Go performer checking out."
+
 ui:
 
 clean:

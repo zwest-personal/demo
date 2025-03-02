@@ -23,6 +23,8 @@ import (
 	"github.com/zwest-personal/demo/services/go-performer/listeners"
 )
 
+const ServiceName = "go-performer"
+
 // Common vars, though in practice it's just the one that has everything else in it...
 var (
 	// Svc has all our shared configuration and connectors
@@ -36,6 +38,7 @@ func init() {
 func main() {
 	// This is purely to make it easier to see a restart in logging
 	Svc.Log.Trace().Msg("========== GO PERFORMER (RE)STARTING ==========")
+	Svc.Name = ServiceName
 
 	// Process configuration file (.env), allow passing in a specific on for stuff like local development
 	envFile := os.Getenv("ENV_FILE")
@@ -70,9 +73,6 @@ func main() {
 		ReadTimeout:  defaultTimeout,
 		WriteTimeout: defaultTimeout,
 	}
-
-	// Automatically add Temporal to all Chi routes
-	router.Use(chiWorkflow.AutoWorkflow)
 
 	// Start Server, watch for closure
 	go func() {

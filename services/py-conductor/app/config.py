@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+NATS_SUBJECT_BROADCAST = "Broadcast"
+
 # Pull in configuration from our environment
 # In localdev/compose, this will be set by the .env.local file
 # In a shared environment (K8S), would be set in something like AWS Secrets Manager, Vault
