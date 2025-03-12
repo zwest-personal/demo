@@ -17,7 +17,7 @@ VERSION := $(VERSION_GIT)
 
 .PHONY: composition
 composition:
-	docker-compose -f docker-compose.dothething.local.yml up --build
+	docker-compose -f docker-compose.local.yml up --build
 
 .PHONY: go
 go:

@@ -6,10 +6,12 @@ services:
       dockerfile: dev/nginx/Dockerfile.local
     links:
       - py-conductor
-      - go-performer
-      - rust-performer
-      - cs-performer
       - node-performer
+    volumes:
+      - ./sites/dothething/placeholder:/usr/share/nginx/html
+    depends_on:
+      py-conductor:
+        condition: service_started
     ports:
       - "8080:8080"
       - "8083:443"
@@ -20,7 +22,6 @@ services:
         max-size: "200k"
         max-file: "10"
   py-conductor:
-    restart: always
     build:
       context: ./services/py-conductor
       dockerfile: Dockerfile.local
@@ -29,6 +30,7 @@ services:
     links:
       - redis
       - nats
+      - mongodb
     ports:
       - "8080"
     env_file:
@@ -38,46 +40,7 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-  go-performer:
-    restart: always
-    build:
-      context: ./services/go-performer
-      dockerfile: Dockerfile.local
-    volumes:
-      - ./services/go-performer:/app
-    links:
-      - redis
-      - nats
-    ports:
-      - "8080"
-    env_file:
-      - ./services/go-performer/.env.local
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
-  rust-performer:
-    restart: always
-    build:
-      context: ./services/rust-performer
-      dockerfile: Dockerfile.local
-    volumes:
-      - ./services/rust-performer:/app
-    links:
-      - redis
-      - nats
-    ports:
-      - "8080"
-    env_file:
-      - ./services/rust-performer/.env.local
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
   node-performer:
-    restart: always
     build:
       context: ./services/node-performer
       dockerfile: Dockerfile.local
@@ -86,6 +49,7 @@ services:
     links:
       - redis
       - nats
+      - mongodb
     ports:
       - "8080"
     env_file:
@@ -95,25 +59,26 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-  cs-performer:
+  mongodb:
+    # MongoDB setup in this script will reset the data if restarted
+    # Volumes can be used to persist the data if we want
     restart: always
-    build:
-      context: ./services/cs-performer
-      dockerfile: Dockerfile.local
-    volumes:
-      - ./services/cs-performer:/app
-    links:
-      - redis
-      - nats
-    ports:
-      - "8080"
-    env_file:
-      - ./services/cs-performer/.env.local
+    image: mongo:latest
     logging:
       driver: "json-file"
       options:
         max-size: "200k"
         max-file: "10"
+    environment:
+      # Since this is just local mongo w/in the Compose network, exposing creds like this is no biggie
+      MONGO_INITDB_ROOT_USERNAME: demo
+      MONGO_INITDB_ROOT_PASSWORD: demo
+      MONGO_INITDB_DATABASE: demo
+    volumes:
+      - ./dev/migrations/mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      # If an error occurs when spinning up MongoDB, volume needs to be manually created with:
+      # docker volume create --name=demo_mongodata
+      - mongodb-data:/data/db
   nats:
     restart: always
     image: nats:latest
@@ -122,15 +87,6 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-#  Will readd
-#  mongodb:
-#    restart: always
-#    image: mongodb:latest
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "200k"
-#        max-file: "10"
   redis:
     restart: always
     image: redis:latest
@@ -143,4 +99,7 @@ services:
         max-file: "10"
 
 volumes:
-  dothething:
+  mongodb-data:
+
+#volumes:
+#  py-conductor:

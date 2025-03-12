@@ -8,11 +8,22 @@ db.auth(
 db = db.getSiblingDB(process.env.MONGO_INITDB_DATABASE);
 
 try {
-// Basic user creation on DB refresh
+    // Basic user creation on DB refresh
+    // TODO Set roles appropriately, albeit not so important in this context since it's just local dev
     let users = [
         {
             'user': 'py',
             'pass': 'pyconductor',
+            'role': 'dbOwner'
+        },
+        {
+            'user': 'go',
+            'pass': 'goperformer',
+            'role': 'dbOwner'
+        },
+        {
+            'user': 'node',
+            'pass': 'nodeperformer',
             'role': 'dbOwner'
         }
     ]
