@@ -9,7 +9,7 @@ import 'express-async-errors';
 
 import BaseRouter from '@src/routes';
 
-import Paths from '@src/common/Paths';
+import Paths from '@src/common/paths';
 import Config from '@src/common/config';
 import {RouteError} from '@src/common/route-errors';
 import {NodeEnvs} from '@src/common/constants';

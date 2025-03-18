@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Paths from "@src/common/Paths";
+import Paths from "@src/common/paths";
 
 // Import our handlers
 import ping from './ping'

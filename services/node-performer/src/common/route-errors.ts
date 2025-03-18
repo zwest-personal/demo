@@ -1,10 +1,7 @@
 import { IParseObjectError } from 'jet-validators/utils';
 import HttpStatusCodes from 'http-status-codes';
 
-
-/******************************************************************************
-                                 Classes
-******************************************************************************/
+// Only minor changes from boilerplate
 
 /**
  * Error with status code and message.
