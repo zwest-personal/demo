@@ -1,5 +1,5 @@
 import HttpStatusCodes from 'http-status-codes';
-import {jsend} from "@src/common/jsend";
+import { HTTPResponse } from "@src/common/jsend/http";
 import {IReq, IRes} from '../common';
 
 /**
@@ -8,7 +8,7 @@ import {IReq, IRes} from '../common';
  * @param res
  */
 async function ping(_: IReq, res: IRes) {
-    res.status(HttpStatusCodes.OK).json(jsend.success({ping: 'pong'}));
+    res.status(HttpStatusCodes.OK).json(HTTPResponse.success({ping: 'pong'}));
 }
 
 export default ping;

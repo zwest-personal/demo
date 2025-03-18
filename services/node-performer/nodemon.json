@@ -1,0 +1,8 @@
+{
+  "verbose": true,
+  "watch": ["src/"],
+  "ext": "js, ts",
+  "exec": "ts-node ./src/index.ts",
+  "pollingInterval": 500,
+  "legacyWatch": true
+}

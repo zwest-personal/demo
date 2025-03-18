@@ -32,6 +32,7 @@ services:
       - nats
       - mongodb
     ports:
+      - "8081:8080"
       - "8080"
     env_file:
       - ./services/py-conductor/.env.local
@@ -51,9 +52,10 @@ services:
       - nats
       - mongodb
     ports:
+      - "8082:8080"
       - "8080"
     env_file:
-      - ./services/node-performer/.env.local
+      - ./services/node-performer/config/.env.local
     logging:
       driver: "json-file"
       options:

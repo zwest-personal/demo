@@ -6,6 +6,7 @@ export default {
     Connect: '/ws',
   },
   Debug: {
+    Base: '/debug',
     Ping: '/ping'
   },
 } as const;

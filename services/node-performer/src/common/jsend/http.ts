@@ -1,9 +1,4 @@
-/**
- * JSend is a simple spec for JSON responses
- *
- * I've found it a pretty handy spec to adhere to - it's not complicated, very light
- * and offers consistency where it matters.
- */
+import {JSend} from "@src/common/jsend/jsend";
 
 export interface ApiResponse {
     status: 'success' | 'fail' | 'error';
@@ -11,23 +6,23 @@ export interface ApiResponse {
     message?: any;
 }
 
-export class jsend {
+class Response implements JSend {
     // https://github.com/omniti-labs/jsend
-    public static success(data: any): ApiResponse {
+    public success(data: any): ApiResponse {
         return {
             status: 'success',
             data,
         };
     }
 
-    public static fail(data: any): ApiResponse {
+    public fail(data: any): ApiResponse {
         return {
             status: 'fail',
             data,
         };
     }
 
-    public static error(message: string | null, data?: any): ApiResponse {
+    public error(message: string | null, data?: any): ApiResponse {
         return {
             status: 'error',
             message,
@@ -35,3 +30,5 @@ export class jsend {
         };
     }
 }
+
+export const HTTPResponse = new Response()

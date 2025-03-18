@@ -3,7 +3,7 @@
  */
 
 import WebSocket, {RawData} from "ws";
-import {jsend} from "@src/common/jsend";
+import {HTTPResponse} from "@src/common/jsend/http";
 import Paths from "@src/common/paths";
 
 export default async (server: any) => {
@@ -31,7 +31,7 @@ export default async (server: any) => {
 
                 console.log(parsedMessage);
 
-                websocketConnection.send(jsend.success({state: 'connected'}).toString(), { binary: false });
+                websocketConnection.send(HTTPResponse.success({state: 'connected'}).toString(), {binary: false});
             });
         }
     );

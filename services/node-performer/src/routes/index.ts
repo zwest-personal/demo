@@ -10,7 +10,8 @@ import DebugRouter from '@src/routes/debug';
  * So instead of putting a route here you'd define it
  */
 
-const apiRouter = Router();
-apiRouter.use(Paths.Base, DebugRouter)
+const routes = Router();
+routes.use(Paths.Debug.Base, DebugRouter)
+// routes.use(Paths.SomeOtherResource.Base, SomeOtherRouter)
 
-export default apiRouter;
+export default routes;
