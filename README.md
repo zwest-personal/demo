@@ -1,3 +1,8 @@
+# TAKE HOME QUIZ INFO (For Interview)
+(Bojan)\
+See `/quizzes/simpli-tic4toe`
+
+
 # EVERYTHING IS A WORK IN PROGRESS
 The composition build doesn't work quite yet, working to get basic versions of all the services up and linked
 so that there's a good foundation for fleshing them all out.
