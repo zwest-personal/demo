@@ -1,9 +1,18 @@
-import * as fs from "fs";
-import * as path from "path";
-import TicTacToe from "@src/ttt";
-import {parse} from 'csv-parse';
+/**
+ * Main executable for testing the class.
+ *
+ * This is a bit messy but would also be the first thing to toss
+ * if the TTT class was used for a real game setup (with a UI or inputs or something).
+ * So I didn't want to toss tons of extra time at overthinking it.
+ */
 
-// Load @src/data/boards/csv
+
+import * as fs from 'fs';
+import * as path from 'path';
+import TicTacToe from '@src/models/tictactoe';
+import {parse} from 'csv-parse';
+import logger from '@src/lib/logger';
+
 const csvFilePath = path.resolve(__dirname, '../data/boards.csv');
 const fileContent = fs.readFileSync(csvFilePath, {encoding: 'utf-8'});
 
@@ -12,41 +21,39 @@ const fileContent = fs.readFileSync(csvFilePath, {encoding: 'utf-8'});
 // Send it into the TT class
 // Check if the game is over, and if it is who the winner was
 (async () => {
-    const records = parse(fileContent, {
-        columns: false,
-        skip_empty_lines: false,
-        relax_column_count: true,
-    });
-    const result = await records.toArray()
+  const records = parse(fileContent, {
+    columns: false,
+    skip_empty_lines: false,
+    relax_column_count: true,
+  });
+  const result: string[][] = await records.toArray() as string[][];
 
-    for (let r = 0; r < result.length; r++) {
-        if (result[r][0] === '-') {
-            let boardName = result[r + 1][0]
-            let board: string[][] = [];
-            board.push(result[r + 2])
-            board.push(result[r + 3])
-            board.push(result[r + 4])
-            board.push(result[r + 5])
+  for (let r = 0; r < result.length; r++) {
+    if (result[r][0].startsWith('-')) {
+      logger.info('----------------------------------------');
+      const nextBoard = result[r + 1][0];
+      const board: string[][] = [];
+      board.push(result[r + 2]);
+      board.push(result[r + 3]);
+      board.push(result[r + 4]);
+      board.push(result[r + 5]);
 
-            try {
-                let newBoard = new TicTacToe(boardName, board)
-                let result = newBoard.checkWinner()
+      try {
+        const newBoard = new TicTacToe(nextBoard, board);
+        const result = newBoard.checkWinner();
 
-                if (!result) {
-                    console.log(`Winner of "${boardName}" was: \n  There was no winner, no empty spaces left`)
-                } else {
-                    console.log(`Winner of "${boardName}" was: \n  Player ${newBoard.checkWinner()}`)
-                }
-            } catch (e) {
-                console.log(`board error for "${boardName}":\n  ${e.message}`)
-            }
+        // Process our results
+        if (result) {
+          logger.info(`Winner of "${newBoard.gameName}" was: \n  Player ${result}`);
+        } else if (newBoard.anyMovesLeft()) {
+          logger.info(`Winner of "${newBoard.gameName}" was: \n  There was no winner,` +
+            `game has ${newBoard.boardEmptySpots} free spaces left.`);
+        } else {
+          logger.info(`Winner of "${newBoard.gameName}" was: \n  There was no winner, no empty spaces left.`);
         }
+      } catch (e) {
+        logger.info(`board error for "${nextBoard}":\n  ${(e as Error).message}`);
+      }
     }
+  }
 })();
-
-
-// TODO Iterate over each, loading them into the TTT class
-
-// TODO Run check - Are there plays left?  AKA are there empties left.
-// TODO Run check - Is the game over?  Was a winning combo found?
-// TODO Run check - Who was the winner?  Will note if it was a tie, will error if both players 'won'

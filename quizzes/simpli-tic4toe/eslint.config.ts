@@ -11,7 +11,7 @@ export default tseslint.config(
   ...tseslint.configs.stylisticTypeChecked,
   { 
     ignores: [
-      '**/node_modules/*'
+      '**/node_modules/*',
     ],
   },
   {
@@ -51,7 +51,8 @@ export default tseslint.config(
       'max-len': [
         'warn',
         {
-          'code': 80,
+          'code': 120,
+          'ignoreComments': true,
         },
       ],
       '@stylistic/ts/semi': ['warn', 'always'],
