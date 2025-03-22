@@ -7,6 +7,17 @@ This iteration implements the below 'As written' without going beyond the requir
 `simpli-ticnetoe` ("Tic Any Toe") takes the idea behind the test and makes a whole interactive
 game out of it just for funsies.
 
+## Use
+
+Install:
+`npm run clean-install`
+
+Run with existing .csv:
+`npm run dev`
+
+Run tests:
+`npm test`
+
 ## As written
 ```
 Implement a 4x4 Tic-Tac-Toe/Connect Four solver. The program
