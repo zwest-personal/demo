@@ -5,10 +5,13 @@ Node + TypeScript 'performer' service.
 Not much quite yet, just the base TS boilerplate with some cleanup of the excess stuff - this boilerplate
 has a nice folder/file setup but generates a crazy amount of excess scaffolding.
 
+This service, like others, has a lot of 'in progress' stuff either that doesn't
+quite work yet or I didn't commit up at all (eg unit tests)
+
 ## Boilerplate Generator About
 
-This project was created with [express-generator-typescript](https://github.com/seanpmaxwell/express-generator-typescript).
-
+This project was created initially with [express-generator-typescript](https://github.com/seanpmaxwell/express-generator-typescript) just
+to get a file structure going.
 
 # Running in Docker
 
