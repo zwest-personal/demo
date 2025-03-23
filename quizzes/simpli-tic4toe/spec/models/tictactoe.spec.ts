@@ -59,7 +59,7 @@ describe('Valid TicTacToe', () => {
   });
 
   it('show that player one won', () => {
-    expect(board.checkWinner()).toStrictEqual([true, 'one']);
+    expect(board.checkWinner()).toStrictEqual([true, 1]);
   });
 
   const boardTwo = new TicTacToe(validBoardName, validBoardTie);
@@ -72,7 +72,7 @@ describe('Valid TicTacToe', () => {
   });
 
   it('show that the game was a tie', () => {
-    expect(boardTwo.checkWinner()).toStrictEqual([false, '']);
+    expect(boardTwo.checkWinner()).toStrictEqual([false, 0]);
   });
 });
 

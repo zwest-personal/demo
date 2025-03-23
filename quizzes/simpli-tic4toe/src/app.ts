@@ -42,11 +42,11 @@ const fileContent = fs.readFileSync(csvFilePath, {encoding: 'utf-8'});
 
       try {
         const newBoard = new TicTacToe(nextBoard, board);
-        const [hasWinner, winnerRune] = newBoard.checkWinner();
+        const [hasWinner, winner] = newBoard.checkWinner();
 
         // Process our results
         if (hasWinner) {
-          logger.info(`Winner of "${newBoard.gameName}" was: \n  Player ${winnerRune}`);
+          logger.info(`Winner of "${newBoard.gameName}" was: \n  Player ${winner}`);
         } else if (newBoard.anyMovesLeft()) {
           logger.info(`Winner of "${newBoard.gameName}" was: \n  There was no winner,` +
             `game has ${newBoard.boardEmptySpots} free spaces left.`);
