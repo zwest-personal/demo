@@ -1,0 +1,27 @@
+import Bot from '@src/lib/bot';
+import Gameboard from '@src/lib/gameboard';
+
+const boardSize = 6;
+
+// Just need a basic gameboard in this case
+const game = new Gameboard(boardSize);
+describe('Player - Bot', () => {
+  const player = new Bot(game);
+
+  it('should play a valid column', () => {
+    // Play 100 times, get max/min
+    let min = 0, max = boardSize - 1;
+    [...Array(100).keys()].forEach(() => {
+      const result = player.play();
+      min = Math.min(min, result);
+      max = Math.max(max, result);
+    });
+
+    // Min should still be 0
+    expect(min).toBe(0);
+
+    // Max should still be the boardSize
+    expect(max).toBeLessThanOrEqual(boardSize);
+  });
+
+});
