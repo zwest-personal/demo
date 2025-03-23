@@ -19,8 +19,8 @@ from the TicTacToe game rather than real Connect-4.
 Install:
 `npm run clean-install`
 
-Run with existing .csv:
-`npm run dev`
+Run locally on command line:
+`npm run local`
 
 Run tests:
 `npm test`
