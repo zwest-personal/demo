@@ -38,13 +38,15 @@ const fileContent = fs.readFileSync(csvFilePath, {encoding: 'utf-8'});
       board.push(result[r + 4]);
       board.push(result[r + 5]);
 
+      // TODO If the board has too few rows then the above will break
+
       try {
         const newBoard = new TicTacToe(nextBoard, board);
-        const result = newBoard.checkWinner();
+        const [hasWinner, winnerRune] = newBoard.checkWinner();
 
         // Process our results
-        if (result) {
-          logger.info(`Winner of "${newBoard.gameName}" was: \n  Player ${result}`);
+        if (hasWinner) {
+          logger.info(`Winner of "${newBoard.gameName}" was: \n  Player ${winnerRune}`);
         } else if (newBoard.anyMovesLeft()) {
           logger.info(`Winner of "${newBoard.gameName}" was: \n  There was no winner,` +
             `game has ${newBoard.boardEmptySpots} free spaces left.`);

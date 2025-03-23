@@ -67,9 +67,10 @@ class TicTacToe {
   /**
    * checkWinner evaluates the board to see if there is currently a winner
    *
-   * @return string returns rune of winner, empty string if there is no winner
+   * @return boolean was there a winner?
+   * @return string rune of winner, if there was one
    */
-  public checkWinner(): string {
+  public checkWinner(): [boolean, string] {
     // Since this is always a fully formed 4x4 grid, we don't need to be particularly worried about optimization
     /*
         Win conditions:
@@ -121,11 +122,11 @@ class TicTacToe {
 
     // No winner?  Return empty string
     if ((matchingSets[this.runes.one] + matchingSets[this.runes.two]) === 0) {
-      return '';
+      return [false, ''];
     }
 
     // All good, return the actual winner
-    return ((matchingSets[this.runes.one]) ? 'one' : 'two');
+    return [true, ((matchingSets[this.runes.one]) ? 'one' : 'two')];
   }
 
   /**
