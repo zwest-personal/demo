@@ -22,7 +22,6 @@ class TicTacToe {
   public readonly boardEmptySpots: number;
 
   // gameName is the name of this TicTacToe board
-  // Could do a getter/setter here instead
   public readonly gameName: string;
 
   // runes denote what characters align to what player/space type
@@ -31,8 +30,6 @@ class TicTacToe {
     'two': 'O',
     'empty': 'E',
   };
-  // readonly rune_player_two = 'O';
-  // readonly rune_empty_space = 'E';
 
   // boardSize designates the expected board received
   public readonly boardSize = 4;

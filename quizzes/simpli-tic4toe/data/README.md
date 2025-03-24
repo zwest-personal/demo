@@ -12,3 +12,5 @@ E - Empty Square\
 \
 Unit Test check functionality with similar boards but those are written
 right into the tests.
+
+Opted for the X/O/E setup rather than 0/1/2 just for human readability.
