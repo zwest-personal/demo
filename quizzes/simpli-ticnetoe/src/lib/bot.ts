@@ -6,7 +6,11 @@ class Bot implements Player {
   // game points to the Gameboard this Bot is playing on
   private readonly game: Gameboard;
 
+  // name is our player's name
+  public readonly name: string;
+
   public constructor(game: Gameboard) {
+    this.name = 'BottyBoBotty';
     this.game = game;
   }
 
@@ -16,9 +20,7 @@ class Bot implements Player {
    * Could be made more competitive by trying to drop near existing tokens
    */
   public play(): number {
-    const play = Math.floor(Math.random() * (this.game.boardSize + 1)) ;
-    // logger.trace(`Bot played: ${play} (range 0 to ${this.game.boardSize})`);
-    return play;
+    return Math.floor(Math.random() * (this.game.boardSize + 1));
   }
 }
 

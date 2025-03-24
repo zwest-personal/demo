@@ -4,7 +4,7 @@ import Gameboard from '@src/lib/gameboard';
 const boardSize = 6;
 
 // Just need a basic gameboard in this case
-const game = new Gameboard(boardSize);
+const game = new Gameboard(boardSize, boardSize);
 describe('Player - Bot', () => {
   const player = new Bot(game);
 

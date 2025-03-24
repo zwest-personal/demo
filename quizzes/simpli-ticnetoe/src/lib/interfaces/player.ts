@@ -8,6 +8,9 @@ import Gameboard from '@src/lib/gameboard';
  * This may change to an abstract class at some point.
  */
 interface Player {
+  // name is our player's name
+  name: string;
+
   // play asks the Player to return a column number to drop their token into
   play(): number;
 }
