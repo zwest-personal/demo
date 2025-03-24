@@ -14,6 +14,9 @@ the game drops in the tokens like you would in Connect-4 and then checks
 the board for a winner after each play.  Winning conditions are derived
 from the TicTacToe game rather than real Connect-4.
 
+While I wanted to demonstrate a bit more TS knowhow with this project, I found that
+there weren't many 'complex' behaviors with much use here (eg Decorators, Mixins, etc).
+
 ## Use
 
 Install:

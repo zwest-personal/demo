@@ -8,6 +8,19 @@ import InvalidBoardError from '@src/types/errors/InvalidBoardError';
 const minVictorySize = 3, minBoardSize = 3;
 const maxVictorySize = 8, maxBoardSize = 10;
 
+enum stepType {
+  Vertical,
+  Horizontal,
+  Diagonal,
+  Box,
+}
+
+enum stepDirection {
+  Forwards,
+  Backwards,
+
+}
+
 /**
  * Gameboard is the ticnetoe game structure
  *
@@ -115,7 +128,7 @@ class Gameboard {
     this.emptySpaces--;
 
     // TODO Check for winner before returning
-    const winner = this.checkWinningCoordinate(this.heightMap[column]-1, column);
+    const winner = this.checkWinningCoordinate(this.heightMap[column] - 1, column);
     if (winner !== null) {
       this.winner = winner;
     }
@@ -181,10 +194,21 @@ class Gameboard {
    * @return Player winning player, or null
    */
   private checkWinningCoordinate(x: number, y: number): Player | null {
-    // TODO Corners win, no matter the victory size, but only if we're *in* a corner
+    // Corners win, no matter the victory size, but only if we're *in* a corner
+    if (x === (this.boardSize - 1 || 0) && y === (this.boardSize - 1 || 0)) {
+      const checkCorners = this.compareCoordinates(
+        [0, 0],
+        [0, this.boardSize - 1],
+        [this.boardSize - 1, 0],
+        [this.boardSize - 1, this.boardSize - 1]);
+      if (checkCorners instanceof Player) {
+        return checkCorners;
+      }
+    }
 
     // TODO Iterate through the conditions:
     // Vertical - needs to have a neighbor above or below
+    // this.linearStep(,)
     // Horizontal - needs to have a matching neighbor east or west
     // Square - toughest to match, but needs to have at least one matching neighbor in a cardinal direction
     // Diagonal - needs to have a matching neighbor in a non-cardinal direction
@@ -196,7 +220,24 @@ class Gameboard {
    * linearStep goes from the requested point along an x or y axis
    * @private
    */
-  private linearStep() {}
+  private linearStep(type: stepType /* lastStep, nextStep, stepDirection? */): Player | null {
+
+    // TODO
+    switch (type) {
+    case stepType.Vertical:
+      // TODO Iterate up/down
+      break;
+    case stepType.Horizontal:
+      // TODO Iterate left/right
+      break;
+    case stepType.Diagonal:
+      // TODO Iterate on a diagonal
+      break;
+
+    }
+
+    return null;
+  }
 
   /**
    * boxStep will attempt to step over/down/back to try to discover a 'box' around
@@ -204,7 +245,8 @@ class Gameboard {
    *
    * @private
    */
-  private boxStep() {}
+  private boxStep() {
+  }
 
 }
 
