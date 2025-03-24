@@ -2,16 +2,9 @@ import Player from '@src/lib/interfaces/player';
 import Gameboard from '@src/lib/gameboard';
 import logger from '@src/common/logger';
 
-class Bot implements Player {
-  // game points to the Gameboard this Bot is playing on
-  private readonly game: Gameboard;
-
-  // name is our player's name
-  public readonly name: string;
-
-  public constructor(game: Gameboard) {
-    this.name = 'BottyBoBotty';
-    this.game = game;
+class Bot extends Player {
+  public constructor(name: string, game: Gameboard) {
+    super(`${name} (Bot)`, game);
   }
 
   /**
@@ -19,8 +12,8 @@ class Bot implements Player {
    *
    * Could be made more competitive by trying to drop near existing tokens
    */
-  public play(): number {
-    return Math.floor(Math.random() * (this.game.boardSize + 1));
+  public play(): Promise<number> {
+    return Promise.resolve(Math.floor(Math.random() * (this.game.boardSize + 1)));
   }
 }
 

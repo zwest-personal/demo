@@ -48,7 +48,6 @@ class Gameboard {
         `${Math.min(maxVictorySize, size)}, inclusive`);
     }
 
-
     this.boardSize = size;
     this.victorySize = victorySize;
     this.emptySpaces = this.boardSize ** 2;
@@ -123,6 +122,10 @@ class Gameboard {
   }
 
   /**
+   * Private Functions
+   */
+
+  /**
    * compareCoordinates looks at the provided coordinates and returns their value if all match
    *
    * If they do not match null is returned.  Empty coordinates immediately return null.
@@ -169,6 +172,9 @@ class Gameboard {
    * For horizontal, vertical, diagonal wins - need to keep going in same direction as first
    * For box - need to start horizontal/vertical but keep tabs on the layout.
    *
+   * Lots of ways you could try to optimize the hell out of the pathfinding, but given the size
+   * of the board none really matter.
+   *
    * @param x x/row coordinate
    * @param y y/col coordinate
    * @private
@@ -176,10 +182,30 @@ class Gameboard {
    */
   private checkWinningCoordinate(x: number, y: number): Player | null {
     // TODO Corners win, no matter the victory size, but only if we're *in* a corner
-    // TODO Iterate through
+
+    // TODO Iterate through the conditions:
+    // Vertical - needs to have a neighbor above or below
+    // Horizontal - needs to have a matching neighbor east or west
+    // Square - toughest to match, but needs to have at least one matching neighbor in a cardinal direction
+    // Diagonal - needs to have a matching neighbor in a non-cardinal direction
 
     return null;
   }
+
+  /**
+   * linearStep goes from the requested point along an x or y axis
+   * @private
+   */
+  private linearStep() {}
+
+  /**
+   * boxStep will attempt to step over/down/back to try to discover a 'box' around
+   * the originally requested coordinate
+   *
+   * @private
+   */
+  private boxStep() {}
+
 }
 
 export default Gameboard;

@@ -8,8 +8,8 @@ const rl = createInterface({
   output: process.stdout,
 });
 
-const question = (questionText: string) =>
+const cliInput = (questionText: string) =>
   new Promise<string>(resolve => rl.question(questionText, resolve))
     .finally(() => rl.close());
 
-export default question;
+export default cliInput;
