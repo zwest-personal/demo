@@ -6,13 +6,13 @@ const boardSize = 6;
 // Just need a basic gameboard in this case
 const game = new Gameboard(boardSize, boardSize);
 describe('Player - Bot', () => {
-  const player = new Bot(game);
+  const player = new Bot('TEST', game);
 
   it('should play a valid column', () => {
     // Play 100 times, get max/min
     let min = 0, max = boardSize - 1;
-    [...Array(100).keys()].forEach(() => {
-      const result = player.play();
+    [...Array(100).keys()].forEach(async () => {
+      const result = await player.play();
       min = Math.min(min, result);
       max = Math.max(max, result);
     });

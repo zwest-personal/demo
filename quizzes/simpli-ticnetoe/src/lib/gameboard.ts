@@ -3,6 +3,7 @@ import logger from '@src/common/logger';
 
 import InvalidPlayError from '@src/types/errors/InvalidPlayError';
 import InvalidBoardError from '@src/types/errors/InvalidBoardError';
+import { createBitmap, updateBitmap } from '@src/helpers/bitmap';
 
 // min and max values for board size and victory sets
 const minVictorySize = 3, minBoardSize = 3;
@@ -308,12 +309,12 @@ class Gameboard {
    * TODO Don't like converting the Player map each time, optimize it by keeping it at all times
    *  or at least baking in a new function to generate it
    *
-   * @param p T Player to check for.  Only check for a box victory for the one player.
+   * @param p Player to check for.  Only check for a box victory for the one player.
    * @return Player | null Winning Player (would always be the same as p), or null if there was none
    *
    */
-  private boxCheck<T>(p: T): T | null {
-    const boardMap = this.createBoardBitmap(p);
+  private boxCheck(p:  Player): Player | null {
+    const boardMap = createBitmap(p, this.board);
     const winningBoxMatch = new RegExp(`[1]{${this.victoryBoxSize}`, 'g');
 
     // Box Victory
@@ -333,43 +334,6 @@ class Gameboard {
     }
 
     return null;
-  }
-
-  /**
-   * createBoardBitmap converts the board to a bitmap where the provided player is represented by 1s,
-   * and empty/other player is represented by 0s.
-   *
-   * TODO Potentially just keep this map at all times rather than generating on fly after each turn.
-   *  Not really *that* costly since the board won't get huge but somewhat wasteful.
-   *
-   * If we want to make crazy-picknetoe with a board limit of like 10,000 then we'd definitely need
-   * to go that route.
-   *
-   * @param p What to flag as a 1.  Will always be a player at this time.
-   * @private
-   */
-  private createBoardBitmap<T>(p: T): number[] {
-    /**
-     * Example (4x4 requiring 2x2):
-     * 0001
-     * 0100
-     * 0110
-     * 1110
-     * Need two rows in a row that have two characters in a row
-     * eg:
-     * ((0b10111 & 0b01010)).toString(2).match(/[1]{2}/g)
-     * (Convert to string as we're not concerned with the numeric value, just neighbors)
-     */
-
-    const boardMap: number[] = [];
-    for (const x of this.board) {
-      let row = '';
-      for (const y of x) {
-        row += (y === p) ? '1' : '0';
-      }
-      boardMap.push(+`0b${row}`);
-    }
-    return boardMap;
   }
 }
 
