@@ -1,3 +1,5 @@
+export type Bitmap = number[];
+
 /**
  * createBoardBitmap converts the provided multidimensional array into
  * where the provided player (or object) is represented by 1s,

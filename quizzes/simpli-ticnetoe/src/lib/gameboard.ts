@@ -3,18 +3,17 @@ import logger from '@src/common/logger';
 
 import InvalidPlayError from '@src/types/errors/InvalidPlayError';
 import InvalidBoardError from '@src/types/errors/InvalidBoardError';
-import { createBitmap, updateBitmap } from '@src/helpers/bitmap';
+import {Bitmap, createBitmap, updateBitmap} from '@src/helpers/bitmap';
 
 // min and max values for board size and victory sets
 const minVictorySize = 3, minBoardSize = 3;
 const maxVictorySize = 8, maxBoardSize = 10;
 
 // Grid coordinates
-interface Coordinate {
+export interface Coordinate {
   x: number;
   y: number;
 }
-
 
 /**
  * Gameboard is the ticnetoe game structure
@@ -38,7 +37,7 @@ class Gameboard {
   public readonly victoryBoxSize: number;
 
   // board defines the current gameboard state.  null indicates no player/empty space
-  private board: (Player | null)[][];
+  public readonly board: (Player | null)[][];
 
   // heightMap tracks how tall each column current is
   private heightMap: number[];
@@ -121,11 +120,14 @@ class Gameboard {
     if (this.heightMap[column] === this.boardSize) {
       throw new InvalidPlayError(`column ${column} cannot be played - it has reached the top`);
     }
+    
+    const row = this.heightMap[column];
 
     // TODO Need some tweaks here?
-    this.board[this.heightMap[column]][column] = player;
+    this.board[row][column] = player;
     this.heightMap[column]++;
     this.emptySpaces--;
+    player.verifiedPlay({x: row, y: column});
 
     // TODO Check for winner before returning
     const winner = this.checkWinningCoordinate(({x: this.heightMap[column] - 1, y: column} as Coordinate));
