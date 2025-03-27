@@ -58,3 +58,6 @@ Victory is determined by one of five conditions:
 
 Since this is only a 4x4 board not much thought was put into optimizing.\
 The 'full' game has to account for that since the board can be much larger.
+
+# What would I change?
+Basically I'd do what I did in simpli-ticknetoe - bitwise comparisons for victories, actual gameplay, etc. 

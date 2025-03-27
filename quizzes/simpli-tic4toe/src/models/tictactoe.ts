@@ -11,6 +11,8 @@ import logger from '@src/lib/logger';
  * and is the language the sample class was in (or at least syntactically
  * aligns with).  No language was specified in details.
  *
+ * TODO Implement bitwise check for victory conditions
+ *
  */
 class TicTacToe {
   // board is a simple representation of the tic-tac-toe board
@@ -22,6 +24,7 @@ class TicTacToe {
   public readonly boardEmptySpots: number;
 
   // gameName is the name of this TicTacToe board
+  // Could do a getter/setter here instead
   public readonly gameName: string;
 
   // runes denote what characters align to what player/space type
