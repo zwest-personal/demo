@@ -14,6 +14,7 @@ interface Coordinate {
   y: number;
 }
 
+
 /**
  * Gameboard is the ticnetoe game structure
  *
@@ -144,15 +145,15 @@ class Gameboard {
    * TODO Allow for Player to be passed in - since we're testing after each move only the last player to play
    * could win.
    *
+   *
    * @param coords number[][] Board coordinates to compare.  Any number can be checked.
    * @return Player | null Player object if all coords match, or null if they do not
    */
   private compareCoordinates(...coords: Coordinate[]): Player | null {
     let player;
-    logger.debug('Check coords: ', coords);
 
     for (const v of coords) {
-      const boardValue = this.board[v.x, v.y];
+      const boardValue = this.board[v.x][v.y];
 
       // Return immediately if any are empty
       if (boardValue === null) {
@@ -210,7 +211,13 @@ class Gameboard {
      * Could reduce this down more # of lines wise but doesn't gain much to do so
      * (eg by storing all the sets of steps into an array and iterating over it)
      *
-     * If we wanted to add more unique win conditions then it'd be worthwhile
+     * TODO Switch to using the bitwise op?
+     * The walk method works fine but if we wanted to unify the victory test then every condition
+     * could use a variation of the boxCheck routine.
+     *
+     * Diagonal could be done as a bitwise |
+     * Horizontal could be done by looking at each row individually
+     * Vertical could be done as a bitwise & where
      */
 
     // Horizontal
@@ -245,42 +252,13 @@ class Gameboard {
       return p;
     }
 
-    /**
-     * TODO Look at the grouping around this coordinate
-     * TODO Refactor this out into
-     * We're looking for a box of size 'Math.ceil(victorySize / 2)'
-     * More complex than a line - 'this' coordinate could be in the middle, on the edge and matching
-     * neighbors could be dead ends rather than sides.
-     * So strategy - walk in the cardinal directions (which we've already done)
-     * If either axis is too short to win, we're done
-     * If both axis are long enough then we need to step along the axis'
-     * In theory, since this is Connect-4(ish), we'd never have anything 'above' us but doesn't make enough
-     * difference implementation wise to be worth addressing.
-     * If the total for both directions (plus our current space) is equal to or more than the winning stretch, game over
-     * If both are long enough then we need to start painting a picture of the grid
-     *
-     * Sequence:
-     * Step N/S , looking at E/W each time
-     * E/W must each step be greater than or equal to the previous row
-     *
-     */
-
-    // One of the cardinal directions is too short for a box
-    if (NCount + SCount < this.victoryBoxSize || ECount + WCount < this.victoryBoxSize) {
-      return null;
+    // Might have a box, pass off to the dedicated function for it
+    if (this.boxCheck(p) !== null) {
+      this.winner = p;
+      return p;
     }
 
-    // Step vertically, but walk E/W each time
-    const boxRows = 1; // We know we have one already
-    if (NCount > 0) {
-
-    }
-    if (SCount > 0) {
-
-    }
-
-
-
+    // No winner yet
     return null;
   }
 
@@ -318,16 +296,81 @@ class Gameboard {
   }
 
   /**
-   * boxStep will attempt to step over/down/back to try to discover a 'box' around
-   * the originally requested coordinate
+   * boxCheck looks for a 'box' victory condition, where an x by x square of the same player's tokens is
+   * found.
    *
-   * Has a unique function as the logic is much different vs linear.
+   * Does so by converting the board to bitmap (with the requested player as 1s) and does a bitwise AND
+   * across the rows, looking for a sequence of rows of sufficient length that generate the needed number
+   * of columns matching.
    *
-   * @private
+   * This could be used for all win conditions as it is - just change the comparison op
+   *
+   * TODO Don't like converting the Player map each time, optimize it by keeping it at all times
+   *  or at least baking in a new function to generate it
+   *
+   * @param p T Player to check for.  Only check for a box victory for the one player.
+   * @return Player | null Winning Player (would always be the same as p), or null if there was none
+   *
    */
-  private boxStep() {
+  private boxCheck<T>(p: T): T | null {
+    const boardMap = this.createBoardBitmap(p);
+    const winningBoxMatch = new RegExp(`[1]{${this.victoryBoxSize}`, 'g');
+
+    // Box Victory
+    // Iterate over the bitmap rows, comparing this.victoryBoxSize rows at a time with a bitwise &
+    // and checking if the outcome includes a this.victoryBoxSize number of 1s in a row.
+    for (let x = 0; x < boardMap.length - this.victoryBoxSize; x++) {
+      let comparison: number = boardMap[x];
+      (boardMap.slice(x + 1, x + this.victoryBoxSize)).forEach((row: number) => {
+        comparison = comparison & row;
+      });
+
+      // Check the comparison, using a regex just to look at the result as a string
+      if ((comparison.toString(2).match(winningBoxMatch) ?? []).length > 0) {
+        // Got a long enough bitmap match, return
+        return p;
+      }
+    }
+
+    return null;
   }
 
+  /**
+   * createBoardBitmap converts the board to a bitmap where the provided player is represented by 1s,
+   * and empty/other player is represented by 0s.
+   *
+   * TODO Potentially just keep this map at all times rather than generating on fly after each turn.
+   *  Not really *that* costly since the board won't get huge but somewhat wasteful.
+   *
+   * If we want to make crazy-picknetoe with a board limit of like 10,000 then we'd definitely need
+   * to go that route.
+   *
+   * @param p What to flag as a 1.  Will always be a player at this time.
+   * @private
+   */
+  private createBoardBitmap<T>(p: T): number[] {
+    /**
+     * Example (4x4 requiring 2x2):
+     * 0001
+     * 0100
+     * 0110
+     * 1110
+     * Need two rows in a row that have two characters in a row
+     * eg:
+     * ((0b10111 & 0b01010)).toString(2).match(/[1]{2}/g)
+     * (Convert to string as we're not concerned with the numeric value, just neighbors)
+     */
+
+    const boardMap: number[] = [];
+    for (const x of this.board) {
+      let row = '';
+      for (const y of x) {
+        row += (y === p) ? '1' : '0';
+      }
+      boardMap.push(+`0b${row}`);
+    }
+    return boardMap;
+  }
 }
 
 export default Gameboard;

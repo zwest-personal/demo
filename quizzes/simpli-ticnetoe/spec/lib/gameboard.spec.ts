@@ -44,8 +44,8 @@ describe('Gameboard', () => {
   
   // Set up players for remaining tests
   beforeEach(() => {
-    Player1 = new Bot(board);
-    Player2 = new Bot(board);
+    Player1 = new Bot('P1', board);
+    Player2 = new Bot('P2', board);
   });
 
   it('should be able to play a few moves', () => {
