@@ -1,7 +1,12 @@
-# TAKE HOME QUIZ INFO (For Interview)
-(Bojan)\
-See `/quizzes/simpli-tic4toe`
+# SIMPLISAFE TAKE HOME QUIZ INFO (For Interview)
+See `/quizzes/simpli-tic4toe` for the 'fast' version - did this over a small number of hours mostly
+just trying to fulfill the requirements.  Once I had a satisfactory implementation I submitted. No
+time or effort has been spent on it since then even though there are some pretty obvious ways to improve it.
 
+`/quizzes/simpli-ticnetoe` is a full game WIP derived from the idea of the tic4toe implementation 
+that's more advanced/scalable and should be looked at if you want to see what sort of 'obvious' improvements
+I would have done on top of it being a full game and not just a single class.  
+I'll probably move this out into its own service and maybe add a UI when I feel up to it.
 
 # EVERYTHING IS A WORK IN PROGRESS
 The composition build doesn't work quite yet, working to get basic versions of all the services up and linked
