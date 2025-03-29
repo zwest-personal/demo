@@ -107,6 +107,8 @@ class Gameboard {
    *
    * throws an error if the play is invalid
    *
+   * TODO Doesn't work yet, always triggers winner on first play but need to give spouse the laptop =p
+   *
    * @param player
    * @param column
    */
