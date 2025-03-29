@@ -1,5 +1,7 @@
 import Gameboard from '@src/lib/gameboard';
-import Bot from '@src/lib/bot';
+import RandoBot from '@src/lib/players/randobot';
+import InvalidBoardError from '@src/types/errors/InvalidBoardError';
+import InvalidPlayError from '@src/types/errors/InvalidPlayError';
 
 const boardSize = 6;
 
@@ -39,13 +41,13 @@ describe('Gameboard', () => {
     }).toThrow();
   });
 
-  let Player1: Bot;
-  let Player2: Bot;
-  
+  let Player1: RandoBot;
+  let Player2: RandoBot;
+
   // Set up players for remaining tests
   beforeEach(() => {
-    Player1 = new Bot('P1', board);
-    Player2 = new Bot('P2', board);
+    Player1 = new RandoBot('P1', board);
+    Player2 = new RandoBot('P2', board);
   });
 
   it('should be able to play a few moves', () => {
@@ -54,5 +56,26 @@ describe('Gameboard', () => {
 
     board.play(Player2, 0);
     expect(board.movesLeft()).toBe(boardSize ** 2 - 2);
+  });
+});
+
+describe('Gameboard Errors', () => {
+  it('should trigger a play error', () => {
+    const board = new Gameboard(boardSize, boardSize);
+    const player = new RandoBot('P1', board);
+
+    expect(() => {
+      board.play(player, -1);
+    }).toThrow(InvalidPlayError);
+
+    expect(() => {
+      board.play(player, boardSize + 1);
+    }).toThrow(InvalidPlayError);
+  });
+
+  it('should trigger a board error', () => {
+    expect(() => {
+      new Gameboard(1, 0);
+    }).toThrow(InvalidBoardError);
   });
 });

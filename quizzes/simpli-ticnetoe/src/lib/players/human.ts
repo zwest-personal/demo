@@ -1,4 +1,4 @@
-import Player from '@src/lib/interfaces/player';
+import Player from '@src/lib/players/player';
 import Gameboard from '@src/lib/gameboard';
 import cliInput from '@src/helpers/cliInput';
 

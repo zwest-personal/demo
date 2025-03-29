@@ -1,6 +1,6 @@
 class InvalidPlayError extends Error {
   public constructor(message: string) {
-    super(message);
+    super(`Invalid Play: ${message}`);
     this.name = 'PlayError';
     Object.setPrototypeOf(this, InvalidPlayError.prototype);
   }

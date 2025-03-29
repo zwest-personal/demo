@@ -1,12 +1,12 @@
-import Bot from '@src/lib/bot';
+import RandoBot from '@src/lib/players/randobot';
 import Gameboard from '@src/lib/gameboard';
 
 const boardSize = 6;
 
 // Just need a basic gameboard in this case
 const game = new Gameboard(boardSize, boardSize);
-describe('Player - Bot', () => {
-  const player = new Bot('TEST', game);
+describe('Player - RandoBot', () => {
+  const player = new RandoBot('TEST', game);
 
   it('should play a valid column', () => {
     // Play 100 times, get max/min

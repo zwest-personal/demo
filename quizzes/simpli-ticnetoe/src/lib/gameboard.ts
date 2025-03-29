@@ -1,4 +1,4 @@
-import Player from '@src/lib/interfaces/player';
+import Player from '@src/lib/players/player';
 import logger from '@src/common/logger';
 
 import InvalidPlayError from '@src/types/errors/InvalidPlayError';
@@ -7,7 +7,7 @@ import {Bitmap, createBitmap, updateBitmap} from '@src/helpers/bitmap';
 
 // min and max values for board size and victory sets
 const minVictorySize = 3, minBoardSize = 3;
-const maxVictorySize = 8, maxBoardSize = 10;
+const maxVictorySize = 80, maxBoardSize = 100;
 
 // Grid coordinates
 export interface Coordinate {

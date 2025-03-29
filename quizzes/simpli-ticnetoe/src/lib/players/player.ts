@@ -31,7 +31,11 @@ abstract class Player {
     this.map = createBitmap(this, game.board);
   }
 
-  // play asks the Player to return a column number to drop their token into
+  /**
+   *   play asks the Player to return a column number to drop their token into
+   *
+   *   @return Promise<number> column the player chose to play
+   */
   public abstract play(): Promise<number>;
 
   /**

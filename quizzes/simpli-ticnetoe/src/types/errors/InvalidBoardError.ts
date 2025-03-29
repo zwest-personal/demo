@@ -1,6 +1,6 @@
 class InvalidBoardError extends Error {
   public constructor(message: string) {
-    super(message);
+    super(`Invalid Board: ${message}`);
     this.name = 'BoardError';
     Object.setPrototypeOf(this, InvalidBoardError.prototype);
   }
