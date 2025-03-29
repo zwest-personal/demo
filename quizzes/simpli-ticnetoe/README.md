@@ -27,3 +27,8 @@ Run locally on command line:
 
 Run tests:
 `npm test`
+
+# TODOs
+- Prep front-end site
+- Add in build/run scripts
+- Move into new folder or repo (out of 'quizzes')

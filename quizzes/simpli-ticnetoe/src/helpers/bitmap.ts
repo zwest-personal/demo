@@ -1,3 +1,5 @@
+import logger from '@src/common/logger';
+
 export type Bitmap = number[];
 
 /**
@@ -49,7 +51,16 @@ const updateBitmap = (map: number[], row: number, col: number): void => {
   }
 };
 
+const printBitmap = (map: number[]): void => {
+  let output = '\n';
+  map.forEach(row => {
+    output += row.toString(2).padStart(map.length, '0') + '\n';
+  });
+  logger.debug(output);
+};
+
 export {
   updateBitmap,
   createBitmap,
+  printBitmap,
 };

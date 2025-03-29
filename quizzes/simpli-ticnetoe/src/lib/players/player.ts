@@ -1,5 +1,6 @@
 import Gameboard, {Coordinate} from '@src/lib/gameboard';
-import {Bitmap, createBitmap, updateBitmap} from '@src/helpers/bitmap';
+import {Bitmap, createBitmap, printBitmap, updateBitmap} from '@src/helpers/bitmap';
+import logger from '@src/common/logger';
 
 /**
  * A 'Player' is any participant in the ticnetoe game
@@ -17,7 +18,7 @@ abstract class Player {
   public readonly name: string;
 
   // map is our own bitmap copy of the gameboard
-  private map: Bitmap;
+  public readonly map: Bitmap;
 
   /**
    * TODO Conceptually the Gameboard taking in the Players makes a bit more sense, so may re-jigger.
@@ -41,11 +42,22 @@ abstract class Player {
   /**
    * verifiedPlay is called by the Gameboard to tell the Player their move was valid and to update
    * their bitmap
+   *
+   * @param c Coordinate Point to update in bitmap
    */
   public verifiedPlay(c: Coordinate): void {
-    updateBitmap(this.map, c.x, c.y);
+    updateBitmap(this.map, c.row, c.col);
+    printBitmap(this.map);
   }
 
+  /**
+   * rune just returns a symbol for 'this' player, to help display the board
+   *
+   * @return string rune
+   */
+  public rune(): string {
+    return this.name.charAt(0);
+  }
 }
 
 export default Player;

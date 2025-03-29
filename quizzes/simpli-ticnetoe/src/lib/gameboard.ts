@@ -7,12 +7,12 @@ import {Bitmap, createBitmap, updateBitmap} from '@src/helpers/bitmap';
 
 // min and max values for board size and victory sets
 const minVictorySize = 3, minBoardSize = 3;
-const maxVictorySize = 80, maxBoardSize = 100;
+const maxVictorySize = Number.MAX_SAFE_INTEGER, maxBoardSize = Number.MAX_SAFE_INTEGER;
 
 // Grid coordinates
 export interface Coordinate {
-  x: number;
-  y: number;
+  row: number;
+  col: number;
 }
 
 /**
@@ -64,11 +64,10 @@ class Gameboard {
     this.victoryBoxSize = Math.ceil(victorySize / 2);
     this.emptySpaces = this.boardSize ** 2;
     this.winner = null;
+    this.board = Array.from({length: this.boardSize},
+      () => Array(this.boardSize)
+        .fill(null) as (Player | null)[]);
 
-    // initialize our board to 0's, to indicate empty
-    this.board = new Array(this.boardSize).fill(
-      new Array(this.boardSize).fill(null),
-    ) as (Player | null)[][];
     this.heightMap = new Array(this.boardSize).fill(0) as number[];
   }
 
@@ -110,32 +109,50 @@ class Gameboard {
    * TODO Doesn't work yet, always triggers winner on first play but need to give spouse the laptop =p
    *
    * @param player
-   * @param column
+   * @param col
    */
-  public play(player: Player, column: number) {
+  public play(player: Player, col: number) {
     // If column is invalid, throw error
-    if (column < 0 || column > this.boardSize) {
+    if (col < 0 || col > this.boardSize) {
       throw new InvalidPlayError(`column played must be between 0 and ${this.boardSize}`);
     }
 
     // If column is valid, but is peaked, throw error
-    if (this.heightMap[column] === this.boardSize) {
-      throw new InvalidPlayError(`column ${column} cannot be played - it has reached the top`);
+    if (this.heightMap[col] === this.boardSize) {
+      throw new InvalidPlayError(`column ${col} cannot be played - it has reached the top`);
     }
-    
-    const row = this.heightMap[column];
+
+    const row = this.boardSize - this.heightMap[col] - 1;
 
     // TODO Need some tweaks here?
-    this.board[row][column] = player;
-    this.heightMap[column]++;
+    logger.debug(`Playing: ${player.rune()} ${col},${row}`);
+    this.board[row][col] = player;
+    this.heightMap[col]++;
     this.emptySpaces--;
-    player.verifiedPlay({x: row, y: column});
+    player.verifiedPlay({col, row});
+    logger.debug(this.toString());
 
-    // TODO Check for winner before returning
-    const winner = this.checkWinningCoordinate(({x: this.heightMap[column] - 1, y: column} as Coordinate));
+    // Check for winner using the latest play as a starting point
+    const winner = this.checkWinningCoordinate(({col, row} as Coordinate));
     if (winner !== null) {
       this.winner = winner;
     }
+  }
+
+  /**
+   * toString returns the gameboard as a console ready string
+   *
+   * @return string ready-to-print view of board
+   */
+  public toString(): string {
+    let output = '\n';
+    this.board.forEach(row => {
+      row.forEach(cell => {
+        output += (cell !== null) ? cell.rune() : '_';
+      });
+      output += '\n';
+    });
+    return output;
   }
 
   /**
@@ -158,7 +175,7 @@ class Gameboard {
     let player;
 
     for (const v of coords) {
-      const boardValue = this.board[v.x][v.y];
+      const boardValue = this.board[v.row][v.col];
 
       // Return immediately if any are empty
       if (boardValue === null) {
@@ -193,20 +210,21 @@ class Gameboard {
    * @return Player winning player, or null
    */
   private checkWinningCoordinate(c: Coordinate): Player | null {
-    const p = this.board[c.x][c.y];
+    const p = this.board[c.row][c.col];
     if (p === null) {
       return null;
     }
 
     // Corners win, no matter the victory size, but only if we're *in* a corner
-    if (c.x === (this.boardSize - 1 || 0) && c.y === (this.boardSize - 1 || 0)) {
+    if (c.col === (this.boardSize - 1 || 0) && c.row === (this.boardSize - 1 || 0)) {
       const checkCorners = this.compareCoordinates(
-        {x: 0, y: 0},
-        {x: 0, y: this.boardSize - 1},
-        {x: this.boardSize - 1, y: 0},
-        {x: this.boardSize - 1, y: this.boardSize - 1},
+        {col: 0, row: 0},
+        {col: 0, row: this.boardSize - 1},
+        {col: this.boardSize - 1, row: 0},
+        {col: this.boardSize - 1, row: this.boardSize - 1},
       );
-      if (checkCorners instanceof Player) {
+      if (checkCorners !== null) { // } Player) {
+        logger.debug('Corners Victory');
         return checkCorners;
       }
     }
@@ -216,7 +234,8 @@ class Gameboard {
      * Could reduce this down more # of lines wise but doesn't gain much to do so
      * (eg by storing all the sets of steps into an array and iterating over it)
      *
-     * TODO Switch to using the bitwise op?
+     * TODO Switch to using the bitwise op - on very large boards more efficient and would unify solution
+     *
      * The walk method works fine but if we wanted to unify the victory test then every condition
      * could use a variation of the boxCheck routine.
      *
@@ -226,39 +245,44 @@ class Gameboard {
      */
 
     // Horizontal
-    const [, ECount] = this.walkBoard(p, c, {x: 1, y: 0}, true);
-    const [, WCount] = this.walkBoard(p, c, {x: -1, y: 0}, true);
+    const [, ECount] = this.walkBoard(p, c, {row: 0, col: 1}, false);
+    const [, WCount] = this.walkBoard(p, c, {row: 0, col: -1}, true);
     if (ECount + WCount >= this.victorySize) {
+      logger.debug('E/W Victory');
       this.winner = p;
       return p;
     }
 
     // Vertical
-    const [, SCount] = this.walkBoard(p, c, {x: 0, y: 1}, true);
-    const [, NCount] = this.walkBoard(p, c, {x: 0, y: -1}, true);
+    const [, SCount] = this.walkBoard(p, c, {row: 1, col: 0}, false);
+    const [, NCount] = this.walkBoard(p, c, {row: -1, col: 0}, true);
     if (SCount + NCount >= this.victorySize) {
+      logger.debug('N/S Victory');
       this.winner = p;
       return p;
     }
 
     // Diagonal - NE/SW
-    const [, NECount] = this.walkBoard(p, c, {x: 1, y: -1}, true);
-    const [, SWCount] = this.walkBoard(p, c, {x: -1, y: 1}, true);
+    const [, NECount] = this.walkBoard(p, c, {col: 1, row: -1}, false);
+    const [, SWCount] = this.walkBoard(p, c, {col: -1, row: 1}, true);
     if (NECount + SWCount >= this.victorySize) {
+      logger.debug('NE/SW Victory');
       this.winner = p;
       return p;
     }
 
     // Diagonal - NW/SE
-    const [, NWCount] = this.walkBoard(p, c, {x: -1, y: -1}, true);
-    const [, SECount] = this.walkBoard(p, c, {x: 1, y: 1}, true);
+    const [, NWCount] = this.walkBoard(p, c, {col: -1, row: -1}, false);
+    const [, SECount] = this.walkBoard(p, c, {col: 1, row: 1}, true);
     if (NWCount + SECount >= this.victorySize) {
+      logger.debug('NW/SE Victory');
       this.winner = p;
       return p;
     }
 
     // Might have a box, pass off to the dedicated function for it
     if (this.boxCheck(p) !== null) {
+      logger.debug('Box Victory');
       this.winner = p;
       return p;
     }
@@ -277,23 +301,19 @@ class Gameboard {
    * @private
    */
   private walkBoard(p: Player, coords: Coordinate, step: Coordinate, skip = false): [Player | null, number] {
-    const space = this.board[coords.x][coords.y];
+    // Make sure we didn't step outside the board
+    if (coords.row < 0 || coords.col < 0 || coords.row >= this.boardSize || coords.col >= this.boardSize) {
+      return [null, 0];
+    }
+    const space = this.board[coords.row][coords.col];
 
     // If the space is empty, or doesn't match the player that came in, return null
     if (space !== p) {
       return [null, 0];
     }
 
-    // Make sure we didn't step outside the board
-    if (coords.x < 0 || coords.y < 0 || coords.x >= this.boardSize || coords.y >= this.boardSize) {
-      return [null, 0];
-    }
-
     // Space matches, but we're at the edge of the board. Return
-    const nextSpace = {x: coords.x + step.x, y: coords.y + step.y} as Coordinate;
-    if (nextSpace.x < 0 || nextSpace.y < 0 || nextSpace.x >= this.boardSize || nextSpace.y >= this.boardSize) {
-      return [p, 1];
-    }
+    const nextSpace = {col: coords.col + step.col, row: coords.row + step.row} as Coordinate;
 
     // Space matches, and we can keep going. Recurse
     const [, tally] = this.walkBoard(p, nextSpace, step);
@@ -310,24 +330,21 @@ class Gameboard {
    *
    * This could be used for all win conditions as it is - just change the comparison op
    *
-   * TODO Don't like converting the Player map each time, optimize it by keeping it at all times
-   *  or at least baking in a new function to generate it
-   *
    * @param p Player to check for.  Only check for a box victory for the one player.
    * @return Player | null Winning Player (would always be the same as p), or null if there was none
    *
    */
-  private boxCheck(p:  Player): Player | null {
-    const boardMap = createBitmap(p, this.board);
-    const winningBoxMatch = new RegExp(`[1]{${this.victoryBoxSize}`, 'g');
+  private boxCheck(p: Player): Player | null {
+    const boardMap = p.map;
+    const winningBoxMatch = new RegExp(`[1]{${this.victoryBoxSize}}`, 'g');
 
     // Box Victory
     // Iterate over the bitmap rows, comparing this.victoryBoxSize rows at a time with a bitwise &
     // and checking if the outcome includes a this.victoryBoxSize number of 1s in a row.
-    for (let x = 0; x < boardMap.length - this.victoryBoxSize; x++) {
-      let comparison: number = boardMap[x];
-      (boardMap.slice(x + 1, x + this.victoryBoxSize)).forEach((row: number) => {
-        comparison = comparison & row;
+    for (let row = 0; row < boardMap.length + 1 - this.victoryBoxSize; row++) {
+      let comparison: number = boardMap[row];
+      (boardMap.slice(row + 1, row + this.victoryBoxSize)).forEach((boxRow: number) => {
+        comparison = comparison & boxRow;
       });
 
       // Check the comparison, using a regex just to look at the result as a string

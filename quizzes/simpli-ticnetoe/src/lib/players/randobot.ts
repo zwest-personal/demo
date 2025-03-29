@@ -19,7 +19,7 @@ class RandoBot extends Player {
    * play for a RandoBot will just pick a column to drop the token into at random
    */
   public play(): Promise<number> {
-    return Promise.resolve(Math.floor(Math.random() * (this.game.boardSize + 1)));
+    return Promise.resolve(Math.floor(Math.random() * (this.game.boardSize)));
   }
 }
 

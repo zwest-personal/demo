@@ -16,8 +16,6 @@ import {cleanEnv, str} from 'envalid';
 
 const configFile = resolve(__dirname, `../config/.env.${process.env.ENV}`);
 
-console.log('ENV: ', process.env.ENV, process.env);
-
 // dotenv will parse the .env file and set it in the process env
 dotenv({
   path: configFile,

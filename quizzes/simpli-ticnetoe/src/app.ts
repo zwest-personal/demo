@@ -2,6 +2,7 @@ import logger from '@src/common/logger';
 import Gameboard from '@src/lib/gameboard';
 import RandoBot from '@src/lib/players/randobot';
 import delay from '@src/helpers/delay';
+import InvalidPlayError from '@src/types/errors/InvalidPlayError';
 
 /**
  * Main game loop
@@ -12,26 +13,38 @@ import delay from '@src/helpers/delay';
   logger.info('PickNEToe!');
   logger.info('Going with two bots');
 
-  const board = new Gameboard(4, 4);
-  const Player1 = new RandoBot('BOT1', board);
-  const Player2 = new RandoBot('BOT2', board);
+  const board = new Gameboard(30, 6);
+  const Player1 = new RandoBot('XEDBOT', board);
+  const Player2 = new RandoBot('OLACKBOT', board);
 
   let nextPlay = Player2;
   let play = 0;
   while (!board.isGameOver()) {
     nextPlay = (nextPlay === Player1) ? Player2 : Player1;
-    await delay(200);
-    play = await nextPlay.play();
+    await delay(10);
 
-    logger.info(`Player ${nextPlay.name} played: ${play}`);
+    try {
+      play = await nextPlay.play();
 
-    board.play(nextPlay, play);
+      logger.info(`Player ${nextPlay.name} played: ${play}`);
+
+      board.play(nextPlay, play);
+    } catch (e) {
+      logger.info('Invalid play, retrying...');
+      nextPlay = (nextPlay === Player1) ? Player2 : Player1;
+      continue;
+    }
 
     // TODO Add board output/snapshot display
     const winner = board.checkWinner();
     if (winner !== null) {
       logger.info('Winner!');
       logger.info(`${winner.name} won!`);
+      logger.info('Final Board: \n'+board.toString());
+    } else if (!board.movesLeft()) {
+      logger.info('Draw!');
+      logger.info('Game ended in a draw, try again!');
+      logger.info('Final Board: \n'+board.toString());
     }
   }
 
