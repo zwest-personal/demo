@@ -47,7 +47,7 @@ abstract class Player {
    */
   public verifiedPlay(c: Coordinate): void {
     updateBitmap(this.map, c.row, c.col);
-    printBitmap(this.map);
+    // printBitmap(this.map);
   }
 
   /**

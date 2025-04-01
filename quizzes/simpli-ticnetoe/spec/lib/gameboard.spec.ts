@@ -3,14 +3,15 @@ import RandoBot from '@src/lib/players/randobot';
 import InvalidBoardError from '@src/types/errors/InvalidBoardError';
 import InvalidPlayError from '@src/types/errors/InvalidPlayError';
 
-const boardSize = 6;
+const boardSize = 8;
+const victorySize = 4;
 
 describe('Gameboard', () => {
   let board: Gameboard;
 
   it('should create Gameboard successfully', () => {
     expect(() => {
-      board = new Gameboard(boardSize, 6);
+      board = new Gameboard(boardSize, victorySize);
     }).not.toThrow();
   });
 
@@ -22,7 +23,7 @@ describe('Gameboard', () => {
 
   // Prep the game board prior to remaining tests
   beforeEach(() => {
-    board = new Gameboard(boardSize, boardSize);
+    board = new Gameboard(boardSize, victorySize);
   });
 
   it('should have moves left as none have been taken', () => {
@@ -56,6 +57,49 @@ describe('Gameboard', () => {
 
     board.play(Player2, 0);
     expect(board.movesLeft()).toBe(boardSize ** 2 - 2);
+  });
+
+  it('should trigger a win for P1 - horizontal', () => {
+    // Board doesn't require alternating players at this time, but could in time
+    board.play(Player1,0);
+    board.play(Player1,1);
+    board.play(Player1,2);
+    board.play(Player1,3);
+    expect(board.checkWinner()).toBe(Player1);
+  });
+
+  it('should trigger a win for P2 - vertical', () => {
+    // Board doesn't require alternating players at this time, but could in time
+    board.play(Player1,0);
+    board.play(Player2,1);
+    board.play(Player2,1);
+    board.play(Player2,1);
+    board.play(Player2,1);
+    expect(board.checkWinner()).toBe(Player2);
+  });
+
+  it('should trigger a win for P1 - diagonal', () => {
+    board.play(Player1,0);
+    board.play(Player2,1);
+    board.play(Player1,1);
+    board.play(Player2,2);
+    board.play(Player2,2);
+    board.play(Player1,2);
+    board.play(Player2,3);
+    board.play(Player2,3);
+    board.play(Player2,3);
+    board.play(Player1,3);
+
+    expect(board.checkWinner()).toBe(Player1);
+  });
+
+  it('should trigger a win for P2 - box', () => {
+    board.play(Player2,0);
+    board.play(Player2,0);
+    board.play(Player2,1);
+    board.play(Player2,1);
+
+    expect(board.checkWinner()).toBe(Player2);
   });
 });
 

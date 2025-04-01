@@ -13,7 +13,7 @@ import InvalidPlayError from '@src/types/errors/InvalidPlayError';
   logger.info('PickNEToe!');
   logger.info('Going with two bots');
 
-  const board = new Gameboard(30, 6);
+  const board = new Gameboard(60, 10);
   const Player1 = new RandoBot('XEDBOT', board);
   const Player2 = new RandoBot('OLACKBOT', board);
 
