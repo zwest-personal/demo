@@ -1,11 +1,14 @@
 # TicNEToe
 
-Expansion on the take home quiz, for funsies.
+Expansion on a interview take home quiz that saw the creation of a basic class that had
+to fulfill a few requirements.  Doing for funsies.
 
 Interactive game where you specify the size of the game board, the number of 
 cells required for a win, and then play through a simple interface.
 
-Can be played 1P (with the dumbest AI ever) or 2P from command line.
+Can be played 1P (with the dumbest AI ever) or 2P from command line.  
+Currently can just watch two randobots fight it out on a giant board, but next steps are adding
+human play and then a CPU player that can attempt to make logical decisions.
 
 Would be easy enough to throw a UI in front of it and play that way.
 
@@ -31,4 +34,3 @@ Run tests:
 # TODOs
 - Prep front-end site
 - Add in build/run scripts
-- Move into new folder or repo (out of 'quizzes')
