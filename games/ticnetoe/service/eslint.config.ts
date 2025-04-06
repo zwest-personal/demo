@@ -11,7 +11,7 @@ export default tseslint.config(
   ...tseslint.configs.stylisticTypeChecked,
   { 
     ignores: [
-      '**/node_modules/*',
+      '*/node_modules/*',
     ],
   },
   {

@@ -1,13 +1,13 @@
-import logger from '@src/common/logger';
+import logger from './common/logger';
 import Gameboard from '@src/lib/gameboard';
 import RandoBot from '@src/lib/players/randobot';
 import delay from '@src/helpers/delay';
 import InvalidPlayError from '@src/types/errors/InvalidPlayError';
 
 /**
- * Main game loop
+ * Main game loop when running via CLI
  *
- * Likely to get wiped out eventually once all functionality is squared away.
+ * Going to be steadily refactored away into other files
  */
 (async () => {
   logger.info('PickNEToe!');

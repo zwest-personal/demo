@@ -9,16 +9,17 @@
     "skipLibCheck": true,                     
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@src/*": ["src/*"],
+      "@src/*": ["src/*"]
     },
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "useUnknownInCatchVariables": false,
+    "typeRoots": ["./node_modules/@types",
+      "./src/types"],
+    "useUnknownInCatchVariables": false
   },
   "ts-node": {
     "swc": true,
     "require": [
-      "tsconfig-paths/register",
-    ],
+      "tsconfig-paths/register"
+    ]
   },
   "include": [
     "src/**/*.ts",

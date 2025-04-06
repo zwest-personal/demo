@@ -27,6 +27,8 @@ Install:
 
 Run locally on command line:
 `npm run local`
+or
+`npm run local:win` if windows CLI
 
 Run tests:
 `npm test`

@@ -1,12 +1,12 @@
 {
-  "name": "simpli-ticnetoe",
+  "name": "ticnetoe",
   "version": "1.0.0",
   "scripts": {
     "local": "ENV=local ts-node ./src/app.ts",
-    "local:win": "set ENV=local&& ts-node ./src/app.ts",
-    "clean-install": "rm -rf ./node_modules && rm -r package-lock.json && npm i",
-    "lint": "eslint --flag unstable_ts_config",
-    "test": "ENV=test jest ./spec"
+    "local:win": "set ENV=local&& ../node_modules/.bin/ts-node ./src/app.ts",
+    "clean-install": "rm -rf ../node_modules && rm -r package-lock.json && npm i",
+    "lint": "../node_modules/.bin/eslint --flag unstable_ts_config",
+    "test": "ENV=test jest spec"
   },
   "engines": {
     "node": ">=22.0.0"
