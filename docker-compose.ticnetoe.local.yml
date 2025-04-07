@@ -1,0 +1,33 @@
+services:
+  ui:
+    restart: always
+    build:
+      context: ./games/ticnetoe/site/
+      dockerfile: Dockerfile.local
+    links:
+      - service
+    volumes:
+      - ./games/ticnetoe/site/placeholder:/usr/share/nginx/html
+    depends_on:
+      service:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  service:
+    build:
+      context: ./games/ticnetoe/service
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./games/ticnetoe/service:/app
+    env_file:
+      - ./games/ticnetoe/service/config/.env.local
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"

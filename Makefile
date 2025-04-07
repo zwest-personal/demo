@@ -42,6 +42,12 @@ pygo:
 	docker-compose -f docker-compose.py-go.local.yml up --build
 	@echo "Py Conductor and Go performer checking out."
 
+.PHONY: ticnetoe
+ticnetoe:
+	@echo "Building and running TicNEToe UI and API..."
+	docker-compose -f docker-compose.ticnetoe.local.yml up --build
+	@echo "TicNEToe closing down."
+
 ui:
 
 clean:

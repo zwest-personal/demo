@@ -14,3 +14,6 @@ To run just the UI:
 ```bash
 npm run dev
 ```
+
+# TODO
+Move the CI/CD elements (nginx stuff) out of folder, organize it properly.
