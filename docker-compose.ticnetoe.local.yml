@@ -1,4 +1,22 @@
 services:
+  proxy:
+    restart: always
+    build:
+      context: ./games/ticnetoe/proxy/
+      dockerfile: Dockerfile.local
+    links:
+      - service
+      - ui
+    depends_on:
+      service:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
   ui:
     restart: always
     build:
@@ -7,12 +25,10 @@ services:
     links:
       - service
     volumes:
-      - ./games/ticnetoe/site/placeholder:/usr/share/nginx/html
+      - ./games/ticnetoe/site:/app
     depends_on:
       service:
         condition: service_started
-    ports:
-      - "8080:8080"
     logging:
       driver: "json-file"
       options:

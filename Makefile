@@ -48,8 +48,6 @@ ticnetoe:
 	docker-compose -f docker-compose.ticnetoe.local.yml up --build
 	@echo "TicNEToe closing down."
 
-ui:
-
 clean:
 	docker system prune -y
 
