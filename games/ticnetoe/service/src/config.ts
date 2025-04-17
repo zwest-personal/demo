@@ -26,6 +26,7 @@ dotenv({
 const Config = cleanEnv(process.env, {
   ENV: str({choices: ['local', 'test', 'dev']}), // No prod for now
   LOG_LEVEL: str({choices: ['trace', 'debug', 'info', 'warn', 'error']}),
+  API_PATH: str(),
 });
 
 export default Config;
