@@ -5,4 +5,6 @@ WORKDIR /app
 
 EXPOSE 8080
 
+ENV NEXT_WEBPACK_USEPOLLING=true
+
 CMD npm install && npm run dev

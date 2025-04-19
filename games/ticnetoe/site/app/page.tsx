@@ -7,7 +7,11 @@ export default function Home() {
 
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          Live refresh working?
+          Live refresh finally working after a lot of tweaking.
+
+          Turbo (Rust compiler) seems to not like setup.
+
+          Thankfully the UI of this will never be *that* big so webpack is fine.
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
