@@ -1,0 +1,141 @@
+### Requeste items route w/out Client ID
+GET http://localhost:8080/items
+client-id: 1234
+Accept: application/json
+
+###
+### Requeste items route w/Good Client ID
+GET http://localhost:8080/items
+Accept: application/json
+
+###
+### Requeste items route w/Bad Client ID
+GET http://localhost:8080/items
+Accept: application/json
+
+###
+### Request undefined route
+GET http://localhost:8080/things
+Accept: application/json
+
+###
+### Trigger error (Limit and Seconds are not numbers)
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [
+  ],
+  "clients": [
+    {
+      "clientId": "12345",
+      "limit": "100b",
+      "seconds": 10
+    }
+  ]
+}
+
+### Trigger error (Route missing mandatory client values)
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [
+  ],
+  "clients": [
+    {
+      "limit": 1000,
+      "seconds": 10
+    }
+  ]
+}
+
+### Trigger error (Route missing mandatory values)
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [
+    {}
+  ],
+  "clients": [
+    {
+      "clientId": "1234",
+      "limit": 1000,
+      "seconds": 10
+    }
+  ]
+}
+
+###
+### Trigger error (No Routes)
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [],
+  "clients": [
+    {
+      "clientId": "1234",
+      "limit": 1000,
+      "seconds": 10
+    }
+  ]
+}
+
+###
+### Configure /items to rate limit client 1234 to 1000 req/10 sec
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [
+    {
+      "sourcePath": "/items",
+      "destinationUrl": "https://example.com/items"
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "1234",
+      "limit": 1000,
+      "seconds": 10
+    }
+  ]
+}
+
+### Configure ITEMS to allow for any client without limit
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [
+    {
+      "sourcePath": "/items",
+      "destinationUrl": "https://example.com/items"
+    }
+  ],
+  "clientIds": []
+}
+
+### Route only allows 1111 to access /items without restriction, but no others
+POST http://localhost:8080/configure
+Content-Type: application/json
+
+{
+  "routes": [
+    {
+      "sourcePath": "/items",
+      "destinationUrl": "https://example.com/items"
+    }
+  ],
+  "clientIds": [
+    {
+      "clientId": "1111",
+      "limit": 0
+    }
+  ]
+}
+
+
+

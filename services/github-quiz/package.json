@@ -1,0 +1,16 @@
+{
+  "name": "github-quiz",
+  "version": "1.0.0",
+  "description": "POST /configure",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
