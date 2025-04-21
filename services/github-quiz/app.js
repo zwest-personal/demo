@@ -38,12 +38,12 @@ let configuration = {
 // Original had const, but we want to override the entire obj
 let requests = {
     /**
-        "<route>": {
-            "<clientId>": {
-                "<unix timestamp (in seconds)>":<queries>
-            }
+     "<route>": {
+     "<clientId>": {
+     "<unix timestamp (in seconds)>":<queries>
+     }
 
-        }
+     }
      **/
 
 };
@@ -83,7 +83,8 @@ app.post('/configure', (req, res) => {
         } else if (route.sourcePath.startsWith("/configure")) {
             res.status(400).send({"error": "/configure can not be rate limited.  Configuration not saved."});
             return;
-        };
+        }
+        ;
 
         // TODO Validate that the path and URL are valid, would be best done via Joi
         newConfiguration[route.sourcePath] = {
@@ -135,8 +136,6 @@ app.post('/configure', (req, res) => {
     // Reset rate limiter
     requests = newRequests;
 
-    console.log('new configuration', configuration)
-
     res.status(200).send({"message": "Configuration replaced"})
 });
 
@@ -167,44 +166,46 @@ app.all('*', (req, res) => {
         res.redirect(route.dest, 302);
         return;
     }
-    // BUG
-    if (typeof route[clientId] === 'undefined') {
+
+    if (typeof route.clients[clientId] === 'undefined') {
         res.status(404).send({"message": "client-id not configured for access"});
         return;
     }
 
-
-        const client = configuration[req.url][clientId]
+    const client = configuration[req.url].clients[clientId]
 
     // Get timestamp (seconds)
     const now = Math.floor(+new Date() / 1000);
 
     // Initialize rate if not set
-    if (typeof requests[route][client] === 'undefined') {
-        requests[route][client] = {};
-        requests[route][client][now] = 0;
+    if (typeof requests[req.url][clientId] === 'undefined') {
+        requests[req.url][clientId] = {};
+    }
+    if (typeof requests[req.url][clientId][now] === 'undefined') {
+        requests[req.url][clientId][now] = 0;
     }
 
     // Increment
-    requests[route][client][now] += 1
+    requests[req.url][clientId][now] = 1;
 
     // Look at number of requests over the number of seconds we're rate limiting by
     // Not rounding to nearest second rather than going absolute on ms
     const start = now - client.seconds;
 
     // Calculate total hits over
+    // Note - in a distributed env, could do something like use Redis with scoring to build out the rates
     let hits = 0;
     for (let t = start; t <= now; t++) {
-        hits += requests[route][client][t]
+        hits += (typeof requests[req.url][clientId][t] !== 'undefined') ? requests[req.url][clientId][t] : 0;
     }
 
     // TODO Exceeded limit, throw error
     if (hits > client.limit) {
-        res.status(429);
+        res.status(429).send({'message':'rate exceeded'});
         return;
     }
 
-    res.sendStatus(500);
+    res.redirect(route.dest, 302);
 });
 
 module.exports = app;

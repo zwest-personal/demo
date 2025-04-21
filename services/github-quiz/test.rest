@@ -98,8 +98,8 @@ Content-Type: application/json
   "clients": [
     {
       "clientId": "1234",
-      "limit": 1000,
-      "seconds": 10
+      "limit": 5,
+      "seconds": 30
     }
   ]
 }
