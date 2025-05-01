@@ -1,22 +1,10 @@
-# SIMPLISAFE TAKE HOME QUIZ INFO (For Interview)
-See `/quizzes/simpli-tic4toe` for the 'fast' version - did this over a small number of hours mostly
-just trying to fulfill the requirements.  Once I had a satisfactory implementation (or at least one that
-did what was required and didn't involve spending more hours than reasonable) I submitted. No
-time or effort has been spent on it since then even though there are some pretty obvious ways to improve it, some
-of which are in the TODOs/notes.
-
-`/quizzes/simpli-ticnetoe` is a full game WIP derived from the idea of the tic4toe implementation 
-that's more advanced/scalable and should be looked at if you want to see what sort of 'obvious' improvements
-I would have done on top of it being a full game and not just a single class.  
-I'll probably move this out into its own service and maybe add a UI when I feel up to it, plus toy around
-with a computer opponent that isn't moronic.
-
 # EVERYTHING IS A WORK IN PROGRESS
-The composition build doesn't work quite yet, working to get basic versions of all the services up and linked
-so that there's a good foundation for fleshing them all out.
+Some stuff is the result of me learning, some is a true work in progress to build something.  I do tend to jump
+around based on what technologies I'm interviewing for or interested in, and there are gaps in time
+in effort depending on how busy I get with other things, but I do aim to continually press forward.
 
-There might be things not quite working, or just stubbed, or in pieces.  I gave myself a pretty hefty goal with this
-so it's not an overnight effort to flesh it out.
+I'm happy to tackle any technology someone can throw at me to demonstrate either my existing skills
+or my ability to learn and adapt quickly.
 
 # demo
 Demo project, featuring a cross-set of a bunch of languages and tech just for the sake of demonstrating 
