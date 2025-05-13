@@ -54,4 +54,4 @@ clean:
 .PHONY: $(addprefix .push/, $(IMAGES)) clean
 
 % ::
-	@:
+	@echo "Unknown recipe."
