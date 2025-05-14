@@ -7,7 +7,7 @@ import {IReq, IRes} from '../common';
  * @param _
  * @param res
  */
-async function ping(_: IReq, res: IRes) {
+function ping(_: IReq, res: IRes) {
   res.status(HttpStatusCodes.OK).json(HTTPResponse.success({ping: 'pong'}));
 }
 

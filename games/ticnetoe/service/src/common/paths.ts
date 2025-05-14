@@ -10,4 +10,8 @@ export default {
     Ping: '/ping',
     Connections: '/connections',
   },
+  Board: {
+    Base: '/board',
+    Defaults: '/defaults',
+  },
 } as const;
