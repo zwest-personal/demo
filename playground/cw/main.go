@@ -1,6 +1,7 @@
 /*
-*
-More 'proper' version of the CW live coding challenge, now without jitters!
+Second version of the 'test', stripped down to a very basic (but faster) option.
+This is what you'd use if you wanted to do a bunch of text strings at once - send each full
+string to a worker
 */
 package main
 
@@ -16,62 +17,33 @@ Given a string, count how many times each 'word' appears, delimited by any white
 As this is meant to demo channels/goroutines, use at least two routines and channels for comms.
 */
 
-// Count
-type Count struct {
-	Word  string
-	Count int
-}
-
 // worker counts how many times word appeared in the raw string, pipes it back
-func worker(out chan Count, word string, data []string) {
-	result := 0
-	for _, w := range data {
-		if word == w {
-			result++
+func worker(out chan map[string]int, textData string) {
+	splitData := strings.Fields(textData)
+	result := make(map[string]int)
+
+	for _, w := range splitData {
+		if _, ok := result[w]; !ok {
+			result[w] = 1
+		} else {
+			result[w]++
 		}
 	}
 
-	ret := Count{
-		Word:  word,
-		Count: result,
-	}
-
-	out <- ret
+	out <- result
 }
-
-// wordCount is our final result
-var wordCount map[string]int
 
 func main() {
 	textData := "This is a document with some words Here are more words in another " +
 		"document This document repeats some words"
 
-	// Fields handles all whitespace (rather than using " ")
-	splitData := strings.Fields(textData)
-
-	// Final result data
-	wordCount = make(map[string]int)
-	unique := 0
-
-	// out will contain response from worker of how many
-	out := make(chan Count, len(splitData))
-
-	for _, v := range splitData {
-		// Only do the word if we haven't checked for it yet
-		if _, ok := wordCount[v]; !ok {
-			unique++
-			wordCount[v] = 0
-			go worker(out, v, splitData)
-		}
-	}
-
-	// Build out our results map
-	for range unique {
-		result := <-out
-		wordCount[result.Word] = result.Count
-	}
+	// out will contain response from the worker on the word count for provided string.
+	// If parsing many strings you'd basically fork off a worker for each string
+	out := make(chan map[string]int)
+	go worker(out, textData)
+	result := <-out
 	close(out)
 
 	// Result
-	fmt.Println("Word count:", wordCount)
+	fmt.Println("Word count:", result)
 }
