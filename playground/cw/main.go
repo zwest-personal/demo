@@ -34,16 +34,24 @@ func worker(out chan map[string]int, textData string) {
 }
 
 func main() {
-	textData := "This is a document with some words Here are more words in another " +
-		"document This document repeats some words"
+	textData := []string{
+		"This is a document with some words Here are more words in another " +
+			"document This document repeats some words",
+		"This is a second document with many more words We are only looking at one document at a time" +
+			"in this case but going to make this one far longer",
+	}
 
 	// out will contain response from the worker on the word count for provided string.
 	// If parsing many strings you'd basically fork off a worker for each string
 	out := make(chan map[string]int)
-	go worker(out, textData)
-	result := <-out
-	close(out)
+	for _, d := range textData {
+		go worker(out, d)
+	}
 
-	// Result
-	fmt.Println("Word count:", result)
+	fmt.Println("Word counts:")
+	for range len(textData) {
+		result := <-out
+		fmt.Println(result)
+	}
+	close(out)
 }
